@@ -30,8 +30,6 @@ public class JDBCReservationDAO implements ReservationDAO {
 
 	}
 	
-	
-	
 private Reservation mapRowToReservation(SqlRowSet results) {
 	Reservation reservation = new Reservation();
 	reservation.setCreateDate(results.getDate("create_date").toLocalDate());
