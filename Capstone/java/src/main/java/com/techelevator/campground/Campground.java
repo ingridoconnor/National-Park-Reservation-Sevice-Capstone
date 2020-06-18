@@ -1,4 +1,4 @@
-package capstone;
+package com.techelevator.campground;
 
 import java.math.BigDecimal;
 

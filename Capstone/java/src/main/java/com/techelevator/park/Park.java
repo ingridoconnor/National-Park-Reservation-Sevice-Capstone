@@ -1,4 +1,4 @@
-package com.techelevator;
+package com.techelevator.park;
 
 import java.time.LocalDate;
 
