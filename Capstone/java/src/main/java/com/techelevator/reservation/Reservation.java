@@ -2,7 +2,7 @@ package com.techelevator.reservation;
 
 import java.time.LocalDate;
 
-public class reservation {
+public class Reservation {
 
     private Long reservationId;
     private Long siteId;
