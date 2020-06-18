@@ -31,17 +31,6 @@ public class JDBCParkDAO implements ParkDAO {
 
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	private Park mapRowToPark(SqlRowSet results) {
 		Park park = new Park();
 		park.setArea(results.getInt("area"));

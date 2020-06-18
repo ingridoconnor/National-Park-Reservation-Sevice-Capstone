@@ -8,8 +8,6 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
-
-
 public class JDBCSiteDAO implements SiteDAO {
 
 	private JdbcTemplate jdbcTemplate;
@@ -34,6 +32,7 @@ public class JDBCSiteDAO implements SiteDAO {
 	}
 
 	private Site mapRowToSite(SqlRowSet results) {
+
 		Site site = new Site();
 		site.setAccessible(results.getBoolean("accessible"));
 		site.setCampgroundId(results.getLong("campground_id"));
@@ -43,11 +42,6 @@ public class JDBCSiteDAO implements SiteDAO {
 		site.setSiteNumber(results.getInt("site_number"));
 		site.setUtilities(results.getBoolean("utilities"));
 		return site;
-		
-		
-		
-		
-		
 		
 	}
 }

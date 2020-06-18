@@ -8,10 +8,6 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
-
-
-
-
 public class JDBCCampgroundDAO implements CampgroundDAO {
 	
 	private JdbcTemplate jdbcTemplate;
@@ -19,11 +15,10 @@ public class JDBCCampgroundDAO implements CampgroundDAO {
 	public JDBCCampgroundDAO(DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
-	
 
 
 	@Override
-	public List<Campground> getAllCamgrounds() {
+	public List<Campground> getAllCampgrounds() {
 		List<Campground> campgroundList = new ArrayList<>();
 		String queryGetAllCampgrounds = "SELECT * FROM CAMPGROUND";
 		
@@ -34,8 +29,6 @@ public class JDBCCampgroundDAO implements CampgroundDAO {
 		}
 		
 		return campgroundList;
-
-
 	}
 
 	@Override
@@ -45,7 +38,7 @@ public class JDBCCampgroundDAO implements CampgroundDAO {
 		SqlRowSet results = jdbcTemplate.queryForRowSet(querySearchCampgroundId, campgroundId);
 		results.next();
 		Campground campground = mapRowToCampground(results);
-				
+
 		return campground;
 		
 	}
