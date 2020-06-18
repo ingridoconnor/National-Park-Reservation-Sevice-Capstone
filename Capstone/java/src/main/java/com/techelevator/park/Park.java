@@ -1,5 +1,6 @@
 package com.techelevator.park;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Park {
@@ -7,7 +8,7 @@ public class Park {
 	private Long parkId;
 	private String parkName;
 	private String location;
-	private LocalDate estDate;
+	private Date estDate;
 	private int area;
 	private String description;
 	private int visitors;
@@ -37,10 +38,10 @@ public class Park {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	public LocalDate getEstDate() {
+	public Date getEstDate() {
 		return estDate;
 	}
-	public void setEstDate(LocalDate estDate) {
+	public void setEstDate(Date estDate) {
 		this.estDate = estDate;
 	}
 	public int getArea() {
