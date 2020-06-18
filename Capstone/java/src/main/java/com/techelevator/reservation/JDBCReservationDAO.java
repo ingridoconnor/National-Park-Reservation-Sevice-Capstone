@@ -1,5 +1,6 @@
 package com.techelevator.reservation;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,10 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+
+
+
+
 
 public class JDBCReservationDAO implements ReservationDAO {
 	private JdbcTemplate jdbcTemplate;
@@ -30,7 +35,19 @@ public class JDBCReservationDAO implements ReservationDAO {
 
 	}
 	
-
+	@Override
+	public Reservation searchForReservationByReservationId(Long resIdSearch) {
+		Reservation res = null;
+		String querySearchReservationId = "SELECT * FROM reservation WHERE reservation_id IS ?";
+		
+		SqlRowSet results = jdbcTemplate.queryForRowSet(querySearchReservationId, resIdSearch);
+		if (results.next()) {
+			res = mapRowToReservation(results);
+			
+		}
+		
+		return res;
+	}
 	
 	
 
@@ -57,7 +74,10 @@ private Reservation mapRowToReservation(SqlRowSet results) {
 	reservation.setReservationId(results.getLong("reservation_id"));
 	reservation.setName(results.getString("name"));
 	return reservation;
-}	
+}
+
+
+
 	
 	
 	
