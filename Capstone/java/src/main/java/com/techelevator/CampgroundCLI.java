@@ -74,7 +74,7 @@ public class CampgroundCLI {
 				String parkMenuChoice = (String) menu.getChoiceFromOptions(PARK_MENU_OPTIONS);
 
 				if (parkMenuChoice.equals(PARK_MENU_OPTION_VIEW_CAMPGROUNDS)) {
-					List<Campground> campgrounds = campgroundDAO.getAllCampgrounds();
+					List<Campground> campgrounds = campgroundDAO.getCampgroundByParkId(park.getParkId());
 					for (Campground c : campgrounds) {
 						System.out.println(c);
 					}
