@@ -1,5 +1,6 @@
 package com.techelevator;
 
+import com.techelevator.campground.Campground;
 import com.techelevator.campground.CampgroundDAO;
 import com.techelevator.campground.JDBCCampgroundDAO;
 import com.techelevator.park.JDBCParkDAO;
@@ -17,6 +18,13 @@ import java.util.List;
 public class CampgroundCLI {
 
 	private String[] parkNames;
+
+	private static final String PARK_MENU_OPTION_VIEW_CAMPGROUNDS = "View Campgrounds";
+	private static final String PARK_MENU_OPTION_SEARCH_FOR_RESERVATION = "Search for Reservation";
+	private static final String PARK_MENU_OPTION_RETURN	= "Return to Previous Screen";
+	private static final String[] PARK_MENU_OPTIONS = new String[] {PARK_MENU_OPTION_VIEW_CAMPGROUNDS,
+																	PARK_MENU_OPTION_SEARCH_FOR_RESERVATION,
+																	PARK_MENU_OPTION_RETURN};
 
 	private Menu menu;
 	private ParkDAO parkDAO;
@@ -62,8 +70,17 @@ public class CampgroundCLI {
 
 			if (park.equals(parkDAO.getParkByName(choice))) {
 				System.out.println(park);
-			}
 
+				String parkMenuChoice = (String) menu.getChoiceFromOptions(PARK_MENU_OPTIONS);
+
+				if (parkMenuChoice.equals(PARK_MENU_OPTION_VIEW_CAMPGROUNDS)) {
+					List<Campground> campgrounds = campgroundDAO.getAllCampgrounds();
+					for (Campground c : campgrounds) {
+						System.out.println(c);
+					}
+				}
+
+			}
 		}
 	}
 

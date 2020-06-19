@@ -48,8 +48,16 @@ public BigDecimal getDailyFee() {
 public void setDailyFee(BigDecimal dailyFee) {
 	this.dailyFee = dailyFee;
 }
-//public String toString() {
-//	return parkName;
-//}
 
+	@Override
+	public String toString() {
+		return "Campground{" +
+				"campgroundId=" + campgroundId +
+				", parkId=" + parkId +
+				", parkName='" + parkName + '\'' +
+				", openFromMonth=" + openFromMonth +
+				", openToMonth=" + openToMonth +
+				", dailyFee=" + dailyFee +
+				'}';
+	}
 }

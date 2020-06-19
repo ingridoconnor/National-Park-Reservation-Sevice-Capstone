@@ -56,9 +56,16 @@ public class Park {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	@Override
 	public String toString() {
-		return parkId + " " + parkName + " " + location + " " + estDate + " " + " " 
-	+ visitors + " " + description;
+		return parkName + " National Park " + "\n" +
+				"Location: " + location + "\n" +
+				"Established: " + estDate + "\n" +
+				"Area: " + area + " sq km" + "\n" +
+				"Annual Visitors: " + visitors + "\n"+
+				"\n" +
+				description;
 	}
 
 	@Override

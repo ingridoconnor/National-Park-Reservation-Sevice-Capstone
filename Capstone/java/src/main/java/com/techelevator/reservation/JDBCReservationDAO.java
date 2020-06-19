@@ -66,8 +66,23 @@ public Reservation createNewReservation(String name, Date startDate, Date endDat
 	return reservation;
 }
 
+<<<<<<< HEAD
 
 
+=======
+@Override
+public Reservation createNewReservation(String name, Date startDate, Date endDate) {
+	Reservation reservation = new Reservation();
+	reservation.setName(name);
+	reservation.setFromDate(startDate.toLocalDate());
+	reservation.setToDate(endDate.toLocalDate());
+	String insertNewReservation = "INSERT INTO reservation (name, from_date, to_date) VALUES (?, ?, ?) RETURNING reservation_id";
+	Long newResId = jdbcTemplate.queryForObject(insertNewReservation, Long.class, reservation.getName(),
+			reservation.getFromDate(), reservation.getToDate());
+	reservation.setReservationId(newResId);
+	return reservation;
+}
+>>>>>>> 9010e58bd6b8d7d00d02d8b5154b84b3e08a576e
 private Reservation mapRowToReservation(SqlRowSet results) {
 	Reservation reservation = new Reservation();
 	reservation.setCreateDate(results.getDate("create_date").toLocalDate());
@@ -79,7 +94,10 @@ private Reservation mapRowToReservation(SqlRowSet results) {
 	return reservation;
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9010e58bd6b8d7d00d02d8b5154b84b3e08a576e
 
 
 
