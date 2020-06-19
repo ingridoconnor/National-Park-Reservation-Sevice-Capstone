@@ -17,101 +17,101 @@ import java.util.List;
 
 public class CampgroundCLI {
 
-	private String[] parkNames;
+    private String[] parkNames;
 
-	private static final String PARK_MENU_OPTION_VIEW_CAMPGROUNDS = "View Campgrounds";
-	private static final String PARK_MENU_OPTION_SEARCH_FOR_RESERVATION = "Search for Reservation";
-	private static final String PARK_MENU_OPTION_RETURN	= "Return to Previous Screen";
-	private static final String[] PARK_MENU_OPTIONS = new String[] {PARK_MENU_OPTION_VIEW_CAMPGROUNDS,
-																	PARK_MENU_OPTION_SEARCH_FOR_RESERVATION,
-																	PARK_MENU_OPTION_RETURN};
-	private static final String CAMPGROUND_MENU_OPTION_SEARCH_FOR_RES = "Search For Available Reservation";
-	private static final String CAMPGROUND_MENU_OPTION_RETURN = "Return To Previous Screen";
-	private static final String[] CAMPGROUND_MENU_OPTIONS = new String[] {CAMPGROUND_MENU_OPTION_SEARCH_FOR_RES,
-			CAMPGROUND_MENU_OPTION_RETURN};
-	private Menu menu;
-	private ParkDAO parkDAO;
-	private CampgroundDAO campgroundDAO;
-	private SiteDAO siteDAO;
-	private ReservationDAO reservationDAO;
+    private static final String PARK_MENU_OPTION_VIEW_CAMPGROUNDS = "View Campgrounds";
+    private static final String PARK_MENU_OPTION_SEARCH_FOR_RESERVATION = "Search for Reservation";
+    private static final String PARK_MENU_OPTION_RETURN = "Return to Previous Screen";
+    private static final String[] PARK_MENU_OPTIONS = new String[]{PARK_MENU_OPTION_VIEW_CAMPGROUNDS,
+			                                                       PARK_MENU_OPTION_SEARCH_FOR_RESERVATION,
+                                                                   PARK_MENU_OPTION_RETURN};
+    private static final String CAMPGROUND_MENU_OPTION_SEARCH_FOR_RES = "Search For Available Reservation";
+    private static final String CAMPGROUND_MENU_OPTION_RETURN = "Return To Previous Screen";
+    private static final String[] CAMPGROUND_MENU_OPTIONS = new String[]{CAMPGROUND_MENU_OPTION_SEARCH_FOR_RES,
+                                                                         CAMPGROUND_MENU_OPTION_RETURN};
+    private Menu menu;
+    private ParkDAO parkDAO;
+    private CampgroundDAO campgroundDAO;
+    private SiteDAO siteDAO;
+    private ReservationDAO reservationDAO;
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		CampgroundCLI application = new CampgroundCLI();
-		application.run();
+        CampgroundCLI application = new CampgroundCLI();
+        application.run();
 
-	}
+    }
 
-	public CampgroundCLI() {
+    public CampgroundCLI() {
 
-		menu = new Menu(System.in, System.out);
+        menu = new Menu(System.in, System.out);
 
-		BasicDataSource dataSource = new BasicDataSource();
-		dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
-		dataSource.setUsername("postgres");
-		dataSource.setPassword("G0dmanthing");
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("G0dmanthing");
 
-		parkDAO = new JDBCParkDAO(dataSource);
-		campgroundDAO = new JDBCCampgroundDAO(dataSource);
-		siteDAO = new JDBCSiteDAO(dataSource);
-		reservationDAO = new JDBCReservationDAO(dataSource);
-		parkNames = new String[parkDAO.getAllParks().size()];
+        parkDAO = new JDBCParkDAO(dataSource);
+        campgroundDAO = new JDBCCampgroundDAO(dataSource);
+        siteDAO = new JDBCSiteDAO(dataSource);
+        reservationDAO = new JDBCReservationDAO(dataSource);
+        parkNames = new String[parkDAO.getAllParks().size()];
 
-		for (int i = 0; i < parkNames.length; i++) {
-			parkNames[i] = parkDAO.getAllParks().get(i).getParkName();
-		}
+        for (int i = 0; i < parkNames.length; i++) {
+            parkNames[i] = parkDAO.getAllParks().get(i).getParkName();
+        }
 
-	}
+    }
 
-	public void run() {
+    public void run() {
 
-		while (true) {
+        while (true) {
 
-			printHeading("Select a Park for Further Details");
-			String choice = (String) menu.getChoiceFromOptions(parkNames);
-			Park park = parkDAO.getParkByName(choice);
+            printHeading("Select a Park for Further Details");
+            String choice = (String) menu.getChoiceFromOptions(parkNames);
+            printParkInfoAndGetNextChoice(choice);
 
-			if (park.equals(parkDAO.getParkByName(choice))) {
-				System.out.println(park);
+        }
+    }
 
-				String parkMenuChoice = (String) menu.getChoiceFromOptions(PARK_MENU_OPTIONS);
+    private void printParkInfoAndGetNextChoice(String parkName) {
+        Park park = parkDAO.getParkByName(parkName);
+        System.out.println(park);
 
-				if (parkMenuChoice.equals(PARK_MENU_OPTION_VIEW_CAMPGROUNDS)) {
+		String parkMenuChoice = (String) menu.getChoiceFromOptions(PARK_MENU_OPTIONS);
 
-					listCampgroundsInPark(park.getParkId());
-
-				} else if(parkMenuChoice.equals(PARK_MENU_OPTION_SEARCH_FOR_RESERVATION)) {
-					listCampgroundsInPark(park.getParkId());
-
-					String campgroundMenuChoice = (String) menu.getChoiceFromOptions(CAMPGROUND_MENU_OPTIONS); 
-						if(campgroundMenuChoice.equals(CAMPGROUND_MENU_OPTION_SEARCH_FOR_RES)) {
-							
-							
-						}
-
-						else if(campgroundMenuChoice.equals(CAMPGROUND_MENU_OPTION_RETURN)) {
-							break;
-							
-						}
-					}
-				}
-			}
+		if (parkMenuChoice.equals(PARK_MENU_OPTION_VIEW_CAMPGROUNDS)) {
+			listCampgroundsInPark(park.getParkId());
+		} else if (parkMenuChoice.equals(PARK_MENU_OPTION_SEARCH_FOR_RESERVATION)) {
+			listCampgroundsInPark(park.getParkId());
+			handleReservation();
+		} else if (parkMenuChoice.equals(PARK_MENU_OPTION_RETURN)) {
+			return;
 		}
 
 
-	private void listCampgroundsInPark(Long parkId) {
-		List<Campground> campgroundsAtPark = campgroundDAO.getCampgroundByParkId(parkId);
-		for (Campground c : campgroundsAtPark) {
-			System.out.println(c);
-		}
+    }
+
+    private void handleReservation() {
+		System.out.println("\nWhich campground (enter 0 to cancel)?");
+		System.out.println("What is the arrival date?");
+		System.out.println("What is the departure date?");
 	}
 
-	private void printHeading(String headingText) {
-		System.out.println("\n"+headingText);
-		for(int i = 0; i < headingText.length(); i++) {
-			System.out.print("-");
-		}
-		System.out.println();
-	}
+
+    private void listCampgroundsInPark(Long parkId) {
+        List<Campground> campgroundsAtPark = campgroundDAO.getCampgroundByParkId(parkId);
+        for (Campground c : campgroundsAtPark) {
+            System.out.println(c);
+        }
+    }
+
+    private void printHeading(String headingText) {
+        System.out.println("\n" + headingText);
+        for (int i = 0; i < headingText.length(); i++) {
+            System.out.print("-");
+        }
+        System.out.println();
+    }
 
 }
