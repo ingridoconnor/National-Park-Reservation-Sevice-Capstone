@@ -49,7 +49,7 @@ public class CampgroundCLI {
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
 		dataSource.setUsername("postgres");
-		dataSource.setPassword("postgres1");
+		dataSource.setPassword("G0dmanthing");
 
 		parkDAO = new JDBCParkDAO(dataSource);
 		campgroundDAO = new JDBCCampgroundDAO(dataSource);
@@ -78,34 +78,33 @@ public class CampgroundCLI {
 
 				if (parkMenuChoice.equals(PARK_MENU_OPTION_VIEW_CAMPGROUNDS)) {
 
-					
+					listCampgroundsInPark(park.getParkId());
 
-					List<Campground> campgroundsAtPark = campgroundDAO.getCampgroundByParkId(park.getParkId());
-					for (Campground c : campgroundsAtPark) {
-
-						System.out.println(c);
-						
-					}
 				} else if(parkMenuChoice.equals(PARK_MENU_OPTION_SEARCH_FOR_RESERVATION)) {
-					List<Campground> campgroundsAtPark = campgroundDAO.getCampgroundByParkId(park.getParkId());
-					for (Campground c : campgroundsAtPark) {
+					listCampgroundsInPark(park.getParkId());
 
-						System.out.println(c);
-						
-					}
 					String campgroundMenuChoice = (String) menu.getChoiceFromOptions(CAMPGROUND_MENU_OPTIONS); 
 						if(campgroundMenuChoice.equals(CAMPGROUND_MENU_OPTION_SEARCH_FOR_RES)) {
 							
 							
-						} 
+						}
+
 						else if(campgroundMenuChoice.equals(CAMPGROUND_MENU_OPTION_RETURN)) {
+							break;
 							
 						}
 					}
 				}
 			}
 		}
-	
+
+
+	private void listCampgroundsInPark(Long parkId) {
+		List<Campground> campgroundsAtPark = campgroundDAO.getCampgroundByParkId(parkId);
+		for (Campground c : campgroundsAtPark) {
+			System.out.println(c);
+		}
+	}
 
 	private void printHeading(String headingText) {
 		System.out.println("\n"+headingText);
