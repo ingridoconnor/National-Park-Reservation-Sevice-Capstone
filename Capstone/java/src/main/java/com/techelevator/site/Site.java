@@ -1,5 +1,7 @@
 package com.techelevator.site;
 
+import java.math.BigDecimal;
+
 public class Site {
 
     private Long siteId;
@@ -9,6 +11,7 @@ public class Site {
     private boolean accessible;
     private int maxRvLength;
     private boolean utilities;
+    private BigDecimal dailyFee;
 
     public Long getSiteID() {
         return siteId;
@@ -66,11 +69,16 @@ public class Site {
         this.utilities = utilities;
     }
 
+    public BigDecimal getDailyFee() {
+        return dailyFee;
+    }
+    public void setDailyFee(BigDecimal dailyFee) {
+        this.dailyFee = dailyFee;
+    }
+
 	@Override
 	public String toString() {
-		return "Site [siteId=" + siteId + ", campgroundId=" + campgroundId + ", siteNumber=" + siteNumber
-				+ ", maxOccupancy=" + maxOccupancy + ", accessible=" + accessible + ", maxRvLength=" + maxRvLength
-				+ ", utilities=" + utilities + "]";
+		return siteNumber + " " + maxOccupancy + " " + (accessible ? "True" : "False") + " " + maxRvLength + " " + (utilities ? "True" : "False") + " " + getDailyFee();
 	}
      
 }

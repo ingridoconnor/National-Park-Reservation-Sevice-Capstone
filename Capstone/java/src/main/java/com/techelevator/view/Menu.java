@@ -27,6 +27,9 @@ public class Menu {
     private Object getChoiceFromUserInput(Object[] options) {
         Object choice = null;
         String userInput = in.nextLine();
+        if (userInput.equalsIgnoreCase("Q")) {
+            System.exit(0);
+        }
         try {
             int selectedOption = Integer.parseInt(userInput);
             if (selectedOption <= options.length) {
@@ -47,6 +50,7 @@ public class Menu {
             int optionNum = i + 1;
             out.println(optionNum + ") " + options[i]);
         }
+        out.println("Q) Quit");
         out.print("\nPlease choose an option >>> ");
         out.flush();
     }

@@ -34,7 +34,7 @@ public class JDBCSiteDAO implements SiteDAO {
 	@Override
 	public List<Site> getSitesByDate(Long campgroundId, LocalDate fromDate, LocalDate toDate) {
 		List<Site> siteList = new ArrayList<>();
-		String querySearchSitesById = "SELECT DISTINCT * FROM site s " +
+		String querySearchSitesById = "SELECT site_number, max_occupancy, accessible, max_rv_length, utilities, daily_fee FROM site s " +
 				                      "JOIN campground c ON s.campground_id = c.campground_id " +
 		                              "WHERE s.campground_id = ? " +
 		                              "AND s.site_id NOT IN " +
@@ -54,13 +54,12 @@ public class JDBCSiteDAO implements SiteDAO {
 	private Site mapRowToSite(SqlRowSet results) {
 
 		Site site = new Site();
+		site.setSiteNumber(results.getInt("site_number"));
 		site.setAccessible(results.getBoolean("accessible"));
-		site.setCampgroundId(results.getLong("campground_id"));
 		site.setMaxOccupancy(results.getInt("max_occupancy"));
 		site.setMaxRvLength(results.getInt("max_rv_length"));
-		site.setSiteID(results.getLong("site_id"));
-		site.setSiteNumber(results.getInt("site_number"));
 		site.setUtilities(results.getBoolean("utilities"));
+		site.setDailyFee(results.getBigDecimal("daily_fee"));
 		return site;
 		
 	}

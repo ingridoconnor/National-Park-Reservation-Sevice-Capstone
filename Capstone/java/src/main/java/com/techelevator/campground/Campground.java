@@ -1,14 +1,15 @@
 package com.techelevator.campground;
 
 import java.math.BigDecimal;
+import java.time.Month;
 
 public class Campground {
 
 private Long campgroundId;
 private Long parkId;
-private String parkName;
-private int openFromMonth;
-private int openToMonth;
+private String name;
+private String openFromMonth;
+private String openToMonth;
 private BigDecimal dailyFee;
 
 
@@ -24,22 +25,22 @@ public Long getParkId() {
 public void setParkId(Long parkId) {
 	this.parkId = parkId;
 }
-public String getParkName() {
-	return parkName;
+public String getName() {
+	return name;
 }
-public void setParkName(String parkName) {
-	this.parkName = parkName;
+public void setName(String name) {
+	this.name = name;
 }
-public int getOpenFromMonth() {
+public String getOpenFromMonth() {
 	return openFromMonth;
 }
-public void setOpenFromMonth(int openFromMonth) {
+public void setOpenFromMonth(String openFromMonth) {
 	this.openFromMonth = openFromMonth;
 }
-public int getOpenToMonth() {
+public String getOpenToMonth() {
 	return openToMonth;
 }
-public void setOpenToMonth(int openToMonth) {
+public void setOpenToMonth(String openToMonth) {
 	this.openToMonth = openToMonth;
 }
 public BigDecimal getDailyFee() {
@@ -51,13 +52,6 @@ public void setDailyFee(BigDecimal dailyFee) {
 
 	@Override
 	public String toString() {
-		return "Campground{" +
-				"campgroundId=" + campgroundId +
-				", parkId=" + parkId +
-				", parkName='" + parkName + '\'' +
-				", openFromMonth=" + openFromMonth +
-				", openToMonth=" + openToMonth +
-				", dailyFee=" + dailyFee +
-				'}';
+		return name + " " + (Month.of(Integer.parseInt(openFromMonth)).toString()) + " " + (Month.of(Integer.parseInt(openToMonth)).toString()) + " " + dailyFee;
 	}
 }

@@ -51,7 +51,7 @@ public class CampgroundCLI {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres1");
+        dataSource.setPassword("G0dmanthing");
 
         parkDAO = new JDBCParkDAO(dataSource);
         campgroundDAO = new JDBCCampgroundDAO(dataSource);
@@ -71,6 +71,7 @@ public class CampgroundCLI {
 
             printHeading("Select a Park for Further Details");
             String choice = (String) menu.getChoiceFromOptions(parkNames);
+            System.out.println();
             printParkInfoAndGetNextChoice(choice);
 
         }
@@ -80,45 +81,58 @@ public class CampgroundCLI {
         Park park = parkDAO.getParkByName(parkName);
         System.out.println(park);
 
+        printHeading("Select a Command");
+
 		String parkMenuChoice = (String) menu.getChoiceFromOptions(PARK_MENU_OPTIONS);
 
 		if (parkMenuChoice.equals(PARK_MENU_OPTION_VIEW_CAMPGROUNDS)) {
 			listCampgroundsInPark(park.getParkId());
 		} else if (parkMenuChoice.equals(PARK_MENU_OPTION_SEARCH_FOR_RESERVATION)) {
 			listCampgroundsInPark(park.getParkId());
-			handleReservation();
+			handleSearchReservations();
 		} else if (parkMenuChoice.equals(PARK_MENU_OPTION_RETURN)) {
 			return;
 		}
-
-
     }
 
-    private void handleReservation() {
+    private void handleSearchReservations() {
 
-		System.out.println("\nWhich campground (enter 0 to cancel)?");
-
+		System.out.println("\nWhich campground are you interested in? (enter '0' to return to home screen)");
 		String answer = menu.getUserInput();
 		Long answerAsId = Long.parseLong(answer);
-        System.out.println(answerAsId);
+
+		if (answerAsId == 0) {
+		    return;
+        }
+
 		System.out.println("What is the arrival date? (YYYY-MM-DD)");
 		String arrivalDate = menu.getUserInput();
 		LocalDate arrivalDateAsLocalDate = LocalDate.parse(arrivalDate);
 		System.out.println("What is the departure date? (YYYY-MM-DD)");
         String departureDate = menu.getUserInput();
         LocalDate departureDateAsLocalDate = LocalDate.parse(departureDate);
-        List<Site> site = siteDAO.getSitesByDate(answerAsId, arrivalDateAsLocalDate, departureDateAsLocalDate);
-        for(Site s: site) {
-        	System.out.print(s);
+
+        List<Site> sitesAvailableDuringSelectedDates = siteDAO.getSitesByDate(answerAsId, arrivalDateAsLocalDate, departureDateAsLocalDate);
+
+        if (sitesAvailableDuringSelectedDates.isEmpty()) {
+            System.out.println("No campsites available during selected dates. Please enter different dates, or select a different campsite.");
+        } else {
+            printHeading("Results Matching Your Search Criteria");
+            System.out.println("Site No. Max Occup. Accessible? Max RV Length Utilities Cost");
+            for (Site site : sitesAvailableDuringSelectedDates) {
+                System.out.println(site);
+            }
         }
 
 	}
 
 
     private void listCampgroundsInPark(Long parkId) {
+        printHeading("Name Open Close Daily Fee");
         List<Campground> campgroundsAtPark = campgroundDAO.getCampgroundByParkId(parkId);
-        for (Campground c : campgroundsAtPark) {
-            System.out.println(c);
+        for (Campground campground : campgroundsAtPark) {
+            System.out.print("#" + campground.getCampgroundId() + " ");
+            System.out.println(campground);
         }
     }
 

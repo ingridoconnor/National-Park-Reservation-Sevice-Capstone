@@ -8,8 +8,6 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
-import com.techelevator.park.Park;
-
 public class JDBCCampgroundDAO implements CampgroundDAO {
 	
 	private JdbcTemplate jdbcTemplate;
@@ -45,17 +43,6 @@ public class JDBCCampgroundDAO implements CampgroundDAO {
 		
 	}
 	
-	private Campground mapRowToCampground(SqlRowSet results) {
-		Campground campground = new Campground();
-		campground.setCampgroundId(results.getLong("campground_id"));
-		campground.setParkName(results.getString("name"));
-		campground.setParkId(results.getLong("park_id"));
-		campground.setDailyFee(results.getBigDecimal("daily_fee"));
-		campground.setOpenToMonth(results.getInt("open_from_mm"));
-		campground.setOpenToMonth(results.getInt("open_to_mm"));
-		return campground;
-		
-	}
 
 	@Override
 	public List<Campground> getCampgroundByParkId(Long parkId) {
@@ -71,4 +58,15 @@ public class JDBCCampgroundDAO implements CampgroundDAO {
 		return parkIdList;
 	}
 
+	private Campground mapRowToCampground(SqlRowSet results) {
+		Campground campground = new Campground();
+		campground.setCampgroundId(results.getLong("campground_id"));
+		campground.setName(results.getString("name"));
+		campground.setParkId(results.getLong("park_id"));
+		campground.setDailyFee(results.getBigDecimal("daily_fee"));
+		campground.setOpenFromMonth(results.getString("open_from_mm"));
+		campground.setOpenToMonth(results.getString("open_to_mm"));
+		return campground;
+
+	}
 }

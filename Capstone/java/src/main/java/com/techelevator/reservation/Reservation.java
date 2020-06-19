@@ -9,7 +9,7 @@ public class Reservation {
     private String name;
     private LocalDate fromDate;
     private LocalDate toDate;
-    private LocalDate createDate;
+    private LocalDate createDate = LocalDate.now();
 
     public Long getReservationId() {
         return reservationId;
