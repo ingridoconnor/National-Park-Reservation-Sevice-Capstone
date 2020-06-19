@@ -9,6 +9,7 @@ import com.techelevator.park.ParkDAO;
 import com.techelevator.reservation.JDBCReservationDAO;
 import com.techelevator.reservation.ReservationDAO;
 import com.techelevator.site.JDBCSiteDAO;
+import com.techelevator.site.Site;
 import com.techelevator.site.SiteDAO;
 import com.techelevator.view.Menu;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -50,7 +51,7 @@ public class CampgroundCLI {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("G0dmanthing");
+        dataSource.setPassword("postgres1");
 
         parkDAO = new JDBCParkDAO(dataSource);
         campgroundDAO = new JDBCCampgroundDAO(dataSource);
@@ -106,7 +107,10 @@ public class CampgroundCLI {
 		System.out.println("What is the departure date? (YYYY-MM-DD)");
         String departureDate = menu.getUserInput();
         LocalDate departureDateAsLocalDate = LocalDate.parse(departureDate);
-
+        List<Site> site = siteDAO.getSitesByDate(arrivalDateAsLocalDate, departureDateAsLocalDate, answerAsId);
+        for(Site s: site) {
+        	System.out.print(s);
+        }
 
 	}
 

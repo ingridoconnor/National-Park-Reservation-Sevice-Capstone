@@ -32,12 +32,12 @@ public class JDBCSiteDAO implements SiteDAO {
 
 	}
 	@Override
-	public List<Site> getSitesByDate(Long campgroundId, LocalDate fromDate, LocalDate toDate) {
+	public List<Site> getSitesByDate(LocalDate fromDate, LocalDate toDate, Long campgroundId) {
 		List<Site> siteList = new ArrayList<>();
 		String querySearchSitesById = "SELECT * FROM site WHERE site_id NOT IN (SELECT site_id FROM reservation WHERE "
 				+ "(? BETWEEN from_date AND to_date) OR (?  BETWEEN from_date AND to_date)) "
 				+ "AND campground_id = ? LIMIT 5";
-		SqlRowSet results = jdbcTemplate.queryForRowSet(querySearchSitesById, campgroundId, fromDate, toDate);
+		SqlRowSet results = jdbcTemplate.queryForRowSet(querySearchSitesById, fromDate, toDate, campgroundId);
 		while (results.next()) {
 			Site site = mapRowToSite(results);
 			siteList.add(site);

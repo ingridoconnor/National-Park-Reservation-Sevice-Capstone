@@ -65,4 +65,12 @@ public class Site {
     public void setUtilities(boolean utilities) {
         this.utilities = utilities;
     }
+
+	@Override
+	public String toString() {
+		return "Site [siteId=" + siteId + ", campgroundId=" + campgroundId + ", siteNumber=" + siteNumber
+				+ ", maxOccupancy=" + maxOccupancy + ", accessible=" + accessible + ", maxRvLength=" + maxRvLength
+				+ ", utilities=" + utilities + "]";
+	}
+     
 }
