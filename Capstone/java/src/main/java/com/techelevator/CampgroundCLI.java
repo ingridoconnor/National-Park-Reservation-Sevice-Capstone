@@ -94,7 +94,9 @@ public class CampgroundCLI {
     }
 
     private void handleReservation() {
+
 		System.out.println("\nWhich campground (enter 0 to cancel)?");
+
 		String answer = menu.getUserInput();
 		Long answerAsId = Long.parseLong(answer);
         System.out.println(answerAsId);
@@ -104,6 +106,7 @@ public class CampgroundCLI {
 		System.out.println("What is the departure date? (YYYY-MM-DD)");
         String departureDate = menu.getUserInput();
         LocalDate departureDateAsLocalDate = LocalDate.parse(departureDate);
+
 
 	}
 
