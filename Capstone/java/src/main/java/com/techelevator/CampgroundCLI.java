@@ -13,6 +13,7 @@ import com.techelevator.site.SiteDAO;
 import com.techelevator.view.Menu;
 import org.apache.commons.dbcp2.BasicDataSource;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class CampgroundCLI {
@@ -49,7 +50,7 @@ public class CampgroundCLI {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres1");
+        dataSource.setPassword("G0dmanthing");
 
         parkDAO = new JDBCParkDAO(dataSource);
         campgroundDAO = new JDBCCampgroundDAO(dataSource);
@@ -97,8 +98,13 @@ public class CampgroundCLI {
 		String answer = menu.getUserInput();
 		Long answerAsId = Long.parseLong(answer);
         System.out.println(answerAsId);
-		System.out.println("What is the arrival date?");
-		System.out.println("What is the departure date?");
+		System.out.println("What is the arrival date? (YYYY-MM-DD)");
+		String arrivalDate = menu.getUserInput();
+		LocalDate arrivalDateAsLocalDate = LocalDate.parse(arrivalDate);
+		System.out.println("What is the departure date? (YYYY-MM-DD)");
+        String departureDate = menu.getUserInput();
+        LocalDate departureDateAsLocalDate = LocalDate.parse(departureDate);
+
 	}
 
 
