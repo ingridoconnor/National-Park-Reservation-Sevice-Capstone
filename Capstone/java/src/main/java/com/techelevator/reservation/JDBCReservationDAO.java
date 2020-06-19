@@ -46,12 +46,12 @@ public class JDBCReservationDAO implements ReservationDAO {
 	}
 
 @Override
-public Reservation createReservation(Reservation reservationId) {
+public Reservation createReservation(Reservation reservation) {
 	String insertNewReservation = "INSERT INTO reservation (name, from_date, to_date) VALUES (?, ?, ?) RETURNING reservation_id";
-	Long newResId = jdbcTemplate.queryForObject(insertNewReservation, Long.class, reservationId.getName(),
-			reservationId.getFromDate(), reservationId.getToDate());
-	reservationId.setReservationId(newResId);
-	return reservationId;
+	Long newResId = jdbcTemplate.queryForObject(insertNewReservation, Long.class, reservation.getName(),
+			reservation.getFromDate(), reservation.getToDate());
+	reservation.setReservationId(newResId);
+	return reservation;
 }
 
 
@@ -64,6 +64,19 @@ private Reservation mapRowToReservation(SqlRowSet results) {
 	reservation.setSiteId(results.getLong("site_id"));
 	reservation.setReservationId(results.getLong("reservation_id"));
 	reservation.setName(results.getString("name"));
+	return reservation;
+}
+
+@Override
+public Reservation createNewReservation(String name, Date startDate, Date endDate) {
+	Reservation reservation = new Reservation();
+	reservation.setName(name);
+	reservation.setFromDate(startDate.toLocalDate());
+	reservation.setToDate(endDate.toLocalDate());
+	String insertNewReservation = "INSERT INTO reservation (name, from_date, to_date) VALUES (?, ?, ?) RETURNING reservation_id";
+	Long newResId = jdbcTemplate.queryForObject(insertNewReservation, Long.class, reservation.getName(),
+			reservation.getFromDate(), reservation.getToDate());
+	reservation.setReservationId(newResId);
 	return reservation;
 }
 
