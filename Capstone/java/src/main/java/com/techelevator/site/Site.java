@@ -78,7 +78,7 @@ public class Site {
 
 	@Override
 	public String toString() {
-		return siteNumber + " " + maxOccupancy + " " + (accessible ? "True" : "False") + " " + maxRvLength + " " + (utilities ? "True" : "False") + " " + getDailyFee();
+		return siteId + " " + maxOccupancy + " " + (accessible ? "True" : "False") + " " + maxRvLength + " " + (utilities ? "True" : "False") + " " + getDailyFee();
 	}
      
 }

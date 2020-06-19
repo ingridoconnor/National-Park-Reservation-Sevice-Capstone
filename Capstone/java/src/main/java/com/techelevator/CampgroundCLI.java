@@ -1,5 +1,10 @@
 package com.techelevator;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import org.apache.commons.dbcp2.BasicDataSource;
+
 import com.techelevator.campground.Campground;
 import com.techelevator.campground.CampgroundDAO;
 import com.techelevator.campground.JDBCCampgroundDAO;
@@ -7,15 +12,12 @@ import com.techelevator.park.JDBCParkDAO;
 import com.techelevator.park.Park;
 import com.techelevator.park.ParkDAO;
 import com.techelevator.reservation.JDBCReservationDAO;
+import com.techelevator.reservation.Reservation;
 import com.techelevator.reservation.ReservationDAO;
 import com.techelevator.site.JDBCSiteDAO;
 import com.techelevator.site.Site;
 import com.techelevator.site.SiteDAO;
 import com.techelevator.view.Menu;
-import org.apache.commons.dbcp2.BasicDataSource;
-
-import java.time.LocalDate;
-import java.util.List;
 
 public class CampgroundCLI {
 
@@ -51,7 +53,7 @@ public class CampgroundCLI {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("G0dmanthing");
+        dataSource.setPassword("postgres1");
 
         parkDAO = new JDBCParkDAO(dataSource);
         campgroundDAO = new JDBCCampgroundDAO(dataSource);
@@ -122,9 +124,29 @@ public class CampgroundCLI {
             for (Site site : sitesAvailableDuringSelectedDates) {
                 System.out.println(site);
             }
+            System.out.println("\nWhich site should be reserved?");
+        	String ans = menu.getUserInput();
+        	Long ansAsId = Long.parseLong(ans);
+        	handleAddReservation(ansAsId, arrivalDateAsLocalDate, departureDateAsLocalDate);
         }
 
 	}
+    private void handleAddReservation(Long siteId, LocalDate fromDate, LocalDate toDate) {
+    	
+    	System.out.println("\nWhat name should we reserve under?");
+    	String name = menu.getUserInput();
+    	Reservation res = new Reservation();
+    	res.setSiteId(siteId);
+    	res.setName(name);
+    	res.setFromDate(fromDate);
+    	res.setToDate(toDate);
+    	res = reservationDAO.createReservation(res);
+    	System.out.println("reservation have been made and your confirmation ID is: " + res);
+    	
+    	
+    	
+    	
+    }
 
 
     private void listCampgroundsInPark(Long parkId) {
