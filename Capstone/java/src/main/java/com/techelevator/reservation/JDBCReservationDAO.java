@@ -9,10 +9,6 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
-
-
-
-
 public class JDBCReservationDAO implements ReservationDAO {
 	private JdbcTemplate jdbcTemplate;
 
@@ -48,9 +44,6 @@ public class JDBCReservationDAO implements ReservationDAO {
 		
 		return res;
 	}
-	
-	
-
 
 @Override
 public Reservation createReservation(Reservation reservationId) {

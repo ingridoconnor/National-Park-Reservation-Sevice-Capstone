@@ -2,6 +2,7 @@ package com.techelevator.park;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Park {
 
@@ -12,7 +13,6 @@ public class Park {
 	private int area;
 	private String description;
 	private int visitors;
-	
 	
 	public int getVisitors() {
 		return visitors;
@@ -60,9 +60,23 @@ public class Park {
 		return parkId + " " + parkName + " " + location + " " + estDate + " " + " " 
 	+ visitors + " " + description;
 	}
-	
-	
-	
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Park)) return false;
+		Park park = (Park) o;
+		return getArea() == park.getArea() &&
+				getVisitors() == park.getVisitors() &&
+				Objects.equals(getParkId(), park.getParkId()) &&
+				Objects.equals(getParkName(), park.getParkName()) &&
+				Objects.equals(getLocation(), park.getLocation()) &&
+				Objects.equals(getEstDate(), park.getEstDate()) &&
+				Objects.equals(getDescription(), park.getDescription());
+	}
 
+//	@Override
+//	public int hashCode() {
+//		return Objects.hash(getParkId(), getParkName(), getLocation(), getEstDate(), getArea(), getDescription(), getVisitors());
+//	}
 }

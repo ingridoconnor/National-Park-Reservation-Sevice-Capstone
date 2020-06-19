@@ -16,6 +16,8 @@ import java.util.List;
 
 public class CampgroundCLI {
 
+	private String[] parkNames;
+
 	private Menu menu;
 	private ParkDAO parkDAO;
 	private CampgroundDAO campgroundDAO;
@@ -42,7 +44,11 @@ public class CampgroundCLI {
 		campgroundDAO = new JDBCCampgroundDAO(dataSource);
 		siteDAO = new JDBCSiteDAO(dataSource);
 		reservationDAO = new JDBCReservationDAO(dataSource);
-		List<Park> parks = parkDAO.getAllParks();
+		parkNames = new String[parkDAO.getAllParks().size()];
+
+		for (int i = 0; i < parkNames.length; i++) {
+			parkNames[i] = parkDAO.getAllParks().get(i).getParkName();
+		}
 
 	}
 
@@ -51,10 +57,15 @@ public class CampgroundCLI {
 		while (true) {
 
 			printHeading("Select a Park for Further Details");
+			String choice = (String) menu.getChoiceFromOptions(parkNames);
+			Park park = parkDAO.getParkByName(choice);
+
+			if (park.equals(parkDAO.getParkByName(choice))) {
+				System.out.println(park);
+			}
 
 		}
 	}
-
 
 	private void printHeading(String headingText) {
 		System.out.println("\n"+headingText);
