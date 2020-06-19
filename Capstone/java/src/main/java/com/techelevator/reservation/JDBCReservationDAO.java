@@ -50,8 +50,8 @@ public class JDBCReservationDAO implements ReservationDAO {
 
 @Override
 public Reservation createReservation(Reservation reservation) {
-	String insertNewReservation = "INSERT INTO reservation (name, from_date, to_date, create_date) VALUES (?, ?, ?, ?) RETURNING reservation_id";
-	Long newResId = jdbcTemplate.queryForObject(insertNewReservation, Long.class, reservation.getName(),
+	String insertNewReservation = "INSERT INTO reservation (name, site_id, from_date, to_date, create_date) VALUES (?, ?, ?, ?, ?) RETURNING reservation_id";
+	Long newResId = jdbcTemplate.queryForObject(insertNewReservation, Long.class, reservation.getName(), reservation.getSiteId(),
 			reservation.getFromDate(), reservation.getToDate(), reservation.getCreateDate());
 	reservation.setReservationId(newResId);
 	return reservation;

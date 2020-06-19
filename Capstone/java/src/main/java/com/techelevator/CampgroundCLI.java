@@ -141,7 +141,7 @@ public class CampgroundCLI {
     	res.setFromDate(fromDate);
     	res.setToDate(toDate);
     	res = reservationDAO.createReservation(res);
-    	System.out.println("reservation have been made and your confirmation ID is: " + res);
+    	System.out.println("reservation have been made and your confirmation ID is: " + res.getReservationId());
     	
     	
     	
