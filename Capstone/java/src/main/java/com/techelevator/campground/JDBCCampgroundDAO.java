@@ -8,6 +8,8 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
+import com.techelevator.park.Park;
+
 public class JDBCCampgroundDAO implements CampgroundDAO {
 	
 	private JdbcTemplate jdbcTemplate;
@@ -54,6 +56,21 @@ public class JDBCCampgroundDAO implements CampgroundDAO {
 		return campground;
 		
 		
+	}
+
+
+	@Override
+	public List<Campground> getCampgroundByParkId(Long parkId) {
+		List<Campground> parkIdList = new ArrayList<>();
+		String querySearchParkId = "SELECT * FROM campground WHERE park_id = ?";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(querySearchParkId, parkId);
+
+		while (results.next()) {
+			Campground park = mapRowToCampground(results);
+			parkIdList.add(park);
+		}
+		Campground park = mapRowToCampground(results);
+		return parkIdList;
 	}
 
 }
