@@ -107,7 +107,7 @@ public class CampgroundCLI {
 		System.out.println("What is the departure date? (YYYY-MM-DD)");
         String departureDate = menu.getUserInput();
         LocalDate departureDateAsLocalDate = LocalDate.parse(departureDate);
-        List<Site> site = siteDAO.getSitesByDate(arrivalDateAsLocalDate, departureDateAsLocalDate, answerAsId);
+        List<Site> site = siteDAO.getSitesByDate(answerAsId, arrivalDateAsLocalDate, departureDateAsLocalDate);
         for(Site s: site) {
         	System.out.print(s);
         }

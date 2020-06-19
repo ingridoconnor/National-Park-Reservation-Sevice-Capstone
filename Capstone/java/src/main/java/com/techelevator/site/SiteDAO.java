@@ -7,5 +7,5 @@ public interface SiteDAO {
 
     public List<Site> getAllSites();
 
-	List<Site> getSitesByDate(LocalDate fromDate, LocalDate toDateLong, Long campgroundId);
+	List<Site> getSitesByDate(Long campgroundId, LocalDate fromDate, LocalDate toDateLong);
 }
