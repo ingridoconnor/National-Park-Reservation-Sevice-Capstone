@@ -41,7 +41,6 @@ public class JDBCSiteDAO implements SiteDAO {
 				                      "(SELECT s.site_id FROM reservation r " +
 						              "WHERE (?, ?) OVERLAPS (from_date, to_date) " +
 		                              "GROUP BY s.site_id) " +
-		                              "ORDER_BY daily_fee " +
 		                              "LIMIT 5";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(querySearchSitesById, campgroundId, fromDate, toDate);
 		while (results.next()) {
