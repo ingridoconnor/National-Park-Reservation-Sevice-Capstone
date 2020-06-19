@@ -8,6 +8,7 @@ public interface ReservationDAO {
     public List<Reservation> getAllReservations();
     public Reservation createReservation(Reservation reservation);
     public Reservation searchForReservationByReservationId(Long resIdSearch);
-//    public Reservation createNewReservation(String name, Date startDate, Date endDate);
+    public Reservation createNewReservation(String name, Date startDate, Date endDate);
+	
 
 }
