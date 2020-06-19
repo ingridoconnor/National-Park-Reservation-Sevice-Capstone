@@ -1,6 +1,7 @@
 package com.techelevator.reservation;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,8 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+
+import com.techelevator.site.Site;
 
 public class JDBCReservationDAO implements ReservationDAO {
 	private JdbcTemplate jdbcTemplate;
@@ -53,18 +56,6 @@ public Reservation createReservation(Reservation reservation) {
 	reservation.setReservationId(newResId);
 	return reservation;
 }
-@Override
-public Reservation createNewReservation(String name, Date startDate, Date endDate) {
-	Reservation reservation = new Reservation();
-	reservation.setName(name);
-	reservation.setFromDate(startDate.toLocalDate());
-	reservation.setToDate(endDate.toLocalDate());
-	String insertNewReservation = "INSERT INTO reservation (name, from_date, to_date) VALUES (?, ?, ?) RETURNING reservation_id";
-	Long newResId = jdbcTemplate.queryForObject(insertNewReservation, Long.class, reservation.getName(),
-			reservation.getFromDate(), reservation.getToDate());
-	reservation.setReservationId(newResId);
-	return reservation;
-}
 
 
 private Reservation mapRowToReservation(SqlRowSet results) {
@@ -77,6 +68,8 @@ private Reservation mapRowToReservation(SqlRowSet results) {
 	reservation.setName(results.getString("name"));
 	return reservation;
 }
+
+
 
 
 

@@ -1,5 +1,6 @@
 package com.techelevator.site;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,16 @@ public class JDBCSiteDAO implements SiteDAO {
 		return siteList;
 
 	}
+	@Override
+	public List<Site> getSitesByDate(Long campgroundId, LocalDate fromDate, LocalDate toDate) {
+		List<Site> siteList = new ArrayList<>();
+		String querySearchSitesById = "SELECT * FROM site WHERE site_id NOT IN (SELECT site_id FROM reservation WHERE "
+				+ "(? BETWEEN from_date AND to_date) OR (?  BETWEEN from_date AND to_date)) "
+				+ "AND campground_id = ? LIMIT 5";
+				
+		return null;
+	}
+
 
 	private Site mapRowToSite(SqlRowSet results) {
 

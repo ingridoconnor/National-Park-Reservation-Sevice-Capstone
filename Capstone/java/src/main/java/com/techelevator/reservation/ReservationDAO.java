@@ -1,13 +1,15 @@
 package com.techelevator.reservation;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
+
+import com.techelevator.site.Site;
 
 public interface ReservationDAO {
 
     public List<Reservation> getAllReservations();
     public Reservation createReservation(Reservation reservation);
     public Reservation searchForReservationByReservationId(Long resIdSearch);
-    public Reservation createNewReservation(String name, Date startDate, Date endDate);
+
 
 }
