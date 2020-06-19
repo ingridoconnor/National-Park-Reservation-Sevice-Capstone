@@ -67,7 +67,7 @@ public class JDBCCampgroundDAO implements CampgroundDAO {
 			Campground park = mapRowToCampground(results);
 			parkIdList.add(park);
 		}
-		Campground park = mapRowToCampground(results);
+
 		return parkIdList;
 	}
 

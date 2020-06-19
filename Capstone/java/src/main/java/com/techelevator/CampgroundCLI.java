@@ -46,7 +46,7 @@ public class CampgroundCLI {
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
 		dataSource.setUsername("postgres");
-		dataSource.setPassword("postgres1");
+		dataSource.setPassword("G0dmanthing");
 
 		parkDAO = new JDBCParkDAO(dataSource);
 		campgroundDAO = new JDBCCampgroundDAO(dataSource);
@@ -74,12 +74,16 @@ public class CampgroundCLI {
 				String parkMenuChoice = (String) menu.getChoiceFromOptions(PARK_MENU_OPTIONS);
 
 				if (parkMenuChoice.equals(PARK_MENU_OPTION_VIEW_CAMPGROUNDS)) {
+<<<<<<< HEAD
 					List<Campground> campgrounds = campgroundDAO.getCampgroundByParkId(park.getParkId());
 					for (Campground c : campgrounds) {
+=======
+					List<Campground> campgroundsAtPark = campgroundDAO.getCampgroundByParkId(park.getParkId());
+					for (Campground c : campgroundsAtPark) {
+>>>>>>> 2d273ffff4f7b0a16c4ebf049ed087caca083e2c
 						System.out.println(c);
 					}
 				}
-
 			}
 		}
 	}
