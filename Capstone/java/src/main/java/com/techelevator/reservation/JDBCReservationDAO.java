@@ -66,11 +66,7 @@ public Reservation createNewReservation(String name, Date startDate, Date endDat
 	return reservation;
 }
 
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 2d273ffff4f7b0a16c4ebf049ed087caca083e2c
 private Reservation mapRowToReservation(SqlRowSet results) {
 	Reservation reservation = new Reservation();
 	reservation.setCreateDate(results.getDate("create_date").toLocalDate());

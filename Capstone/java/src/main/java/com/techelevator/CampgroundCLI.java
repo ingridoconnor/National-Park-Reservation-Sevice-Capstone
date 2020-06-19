@@ -25,7 +25,10 @@ public class CampgroundCLI {
 	private static final String[] PARK_MENU_OPTIONS = new String[] {PARK_MENU_OPTION_VIEW_CAMPGROUNDS,
 																	PARK_MENU_OPTION_SEARCH_FOR_RESERVATION,
 																	PARK_MENU_OPTION_RETURN};
-
+	private static final String CAMPGROUND_MENU_OPTION_SEARCH_FOR_RES = "Search For Available Reservation";
+	private static final String CAMPGROUND_MENU_OPTION_RETURN = "Return To Previous Screen";
+	private static final String[] CAMPGROUND_MENU_OPTIONS = new String[] {CAMPGROUND_MENU_OPTION_SEARCH_FOR_RES,
+			CAMPGROUND_MENU_OPTION_RETURN};
 	private Menu menu;
 	private ParkDAO parkDAO;
 	private CampgroundDAO campgroundDAO;
@@ -46,7 +49,7 @@ public class CampgroundCLI {
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
 		dataSource.setUsername("postgres");
-		dataSource.setPassword("G0dmanthing");
+		dataSource.setPassword("postgres1");
 
 		parkDAO = new JDBCParkDAO(dataSource);
 		campgroundDAO = new JDBCCampgroundDAO(dataSource);
@@ -74,19 +77,35 @@ public class CampgroundCLI {
 				String parkMenuChoice = (String) menu.getChoiceFromOptions(PARK_MENU_OPTIONS);
 
 				if (parkMenuChoice.equals(PARK_MENU_OPTION_VIEW_CAMPGROUNDS)) {
-<<<<<<< HEAD
-					List<Campground> campgrounds = campgroundDAO.getCampgroundByParkId(park.getParkId());
-					for (Campground c : campgrounds) {
-=======
+
+					
+
 					List<Campground> campgroundsAtPark = campgroundDAO.getCampgroundByParkId(park.getParkId());
 					for (Campground c : campgroundsAtPark) {
->>>>>>> 2d273ffff4f7b0a16c4ebf049ed087caca083e2c
+
 						System.out.println(c);
+						
+					}
+				} else if(parkMenuChoice.equals(PARK_MENU_OPTION_SEARCH_FOR_RESERVATION)) {
+					List<Campground> campgroundsAtPark = campgroundDAO.getCampgroundByParkId(park.getParkId());
+					for (Campground c : campgroundsAtPark) {
+
+						System.out.println(c);
+						
+					}
+					String campgroundMenuChoice = (String) menu.getChoiceFromOptions(CAMPGROUND_MENU_OPTIONS); 
+						if(campgroundMenuChoice.equals(CAMPGROUND_MENU_OPTION_SEARCH_FOR_RES)) {
+							
+							
+						} 
+						else if(campgroundMenuChoice.equals(CAMPGROUND_MENU_OPTION_RETURN)) {
+							
+						}
 					}
 				}
 			}
 		}
-	}
+	
 
 	private void printHeading(String headingText) {
 		System.out.println("\n"+headingText);
