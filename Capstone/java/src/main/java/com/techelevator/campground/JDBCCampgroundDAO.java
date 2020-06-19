@@ -55,9 +55,7 @@ public class JDBCCampgroundDAO implements CampgroundDAO {
 		campground.setOpenToMonth(results.getInt("open_to_mm"));
 		return campground;
 		
-		
 	}
-
 
 	@Override
 	public List<Campground> getCampgroundByParkId(Long parkId) {

@@ -54,19 +54,6 @@ public Reservation createReservation(Reservation reservation) {
 	return reservation;
 }
 
-
-
-private Reservation mapRowToReservation(SqlRowSet results) {
-	Reservation reservation = new Reservation();
-	reservation.setCreateDate(results.getDate("create_date").toLocalDate());
-	reservation.setFromDate(results.getDate("from_date").toLocalDate());
-	reservation.setToDate(results.getDate("to_date").toLocalDate());
-	reservation.setSiteId(results.getLong("site_id"));
-	reservation.setReservationId(results.getLong("reservation_id"));
-	reservation.setName(results.getString("name"));
-	return reservation;
-}
-
 @Override
 public Reservation createNewReservation(String name, Date startDate, Date endDate) {
 	Reservation reservation = new Reservation();
@@ -79,6 +66,17 @@ public Reservation createNewReservation(String name, Date startDate, Date endDat
 	reservation.setReservationId(newResId);
 	return reservation;
 }
+private Reservation mapRowToReservation(SqlRowSet results) {
+	Reservation reservation = new Reservation();
+	reservation.setCreateDate(results.getDate("create_date").toLocalDate());
+	reservation.setFromDate(results.getDate("from_date").toLocalDate());
+	reservation.setToDate(results.getDate("to_date").toLocalDate());
+	reservation.setSiteId(results.getLong("site_id"));
+	reservation.setReservationId(results.getLong("reservation_id"));
+	reservation.setName(results.getString("name"));
+	return reservation;
+}
+
 
 
 
