@@ -132,25 +132,18 @@ public class CampgroundCLI {
 
 		System.out.println("What is the arrival date? (YYYY-MM-DD)");
 		String arrivalDate = menu.getUserInput();
-        LocalDate arrivalDateAsLocalDate = null;
-
-		if (isValidDate(arrivalDate)) {
-		arrivalDateAsLocalDate = LocalDate.parse(arrivalDate);
-        } else {
-            System.out.println("Not a valid input. Please try again.");
-            handleSearchReservations();
-        }
-
 		System.out.println("What is the departure date? (YYYY-MM-DD)");
         String departureDate = menu.getUserInput();
-        LocalDate departureDateAsLocalDate = null;
 
-        if (isValidDate(departureDate)) {
-            arrivalDateAsLocalDate = LocalDate.parse(arrivalDate);
+        if (isValidDate(arrivalDate) && isValidDate(departureDate)) {
+            // empty if statement who dis
         } else {
-            System.out.println("Not a valid input. Please try again.");
+            System.out.println("Not a valid date. Please try again");
             handleSearchReservations();
         }
+
+        LocalDate arrivalDateAsLocalDate = LocalDate.parse(arrivalDate);
+        LocalDate departureDateAsLocalDate = LocalDate.parse(departureDate);
 
         Period intervalPeriod = Period.between(arrivalDateAsLocalDate, departureDateAsLocalDate);
         BigDecimal daysInIntervalPeriod = BigDecimal.valueOf(intervalPeriod.getDays());
@@ -175,6 +168,10 @@ public class CampgroundCLI {
         }
 
 	}
+
+
+
+
     private void handleAddReservation(Long siteId, LocalDate fromDate, LocalDate toDate) {
 
     	System.out.println("\nWhat name should we reserve under?");
