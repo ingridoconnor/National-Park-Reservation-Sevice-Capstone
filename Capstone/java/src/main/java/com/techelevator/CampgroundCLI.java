@@ -1,6 +1,8 @@
 package com.techelevator;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
@@ -59,7 +61,7 @@ public class CampgroundCLI {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres1");
+        dataSource.setPassword("G0dmanthing");
 
         parkDAO = new JDBCParkDAO(dataSource);
         campgroundDAO = new JDBCCampgroundDAO(dataSource);
@@ -130,10 +132,25 @@ public class CampgroundCLI {
 
 		System.out.println("What is the arrival date? (YYYY-MM-DD)");
 		String arrivalDate = menu.getUserInput();
-		LocalDate arrivalDateAsLocalDate = LocalDate.parse(arrivalDate);
+        LocalDate arrivalDateAsLocalDate = null;
+
+		if (isValidDate(arrivalDate)) {
+		arrivalDateAsLocalDate = LocalDate.parse(arrivalDate);
+        } else {
+            System.out.println("Not a valid input. Please try again.");
+            handleSearchReservations();
+        }
+
 		System.out.println("What is the departure date? (YYYY-MM-DD)");
         String departureDate = menu.getUserInput();
-        LocalDate departureDateAsLocalDate = LocalDate.parse(departureDate);
+        LocalDate departureDateAsLocalDate = null;
+
+        if (isValidDate(departureDate)) {
+            arrivalDateAsLocalDate = LocalDate.parse(arrivalDate);
+        } else {
+            System.out.println("Not a valid input. Please try again.");
+            handleSearchReservations();
+        }
 
         Period intervalPeriod = Period.between(arrivalDateAsLocalDate, departureDateAsLocalDate);
         BigDecimal daysInIntervalPeriod = BigDecimal.valueOf(intervalPeriod.getDays());
@@ -210,6 +227,17 @@ public class CampgroundCLI {
         }
 
         return campgroundId;
+    }
+
+    private boolean isValidDate(String input) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        try {
+            dateFormat.parse(input.trim());
+        } catch (ParseException pe) {
+            return false;
+        }
+        return true;
     }
 
     private void printHeading(String headingText) {

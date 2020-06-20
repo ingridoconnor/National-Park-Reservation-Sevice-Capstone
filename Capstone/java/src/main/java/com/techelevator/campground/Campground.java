@@ -14,7 +14,6 @@ public class Campground {
     private BigDecimal dailyFee;
     public boolean isOpen;
 
-
     public Long getCampgroundId() {
         return campgroundId;
     }
