@@ -37,9 +37,10 @@ public class JDBCReservationDAO implements ReservationDAO {
 	@Override
 	public Reservation searchForReservationByReservationId(Long resIdSearch) {
 		Reservation res = null;
-		String querySearchReservationId = "SELECT * FROM reservation WHERE reservation_id IS ?";
+		String querySearchReservationId = "SELECT * FROM reservation WHERE reservation_id = ?";
 		
 		SqlRowSet results = jdbcTemplate.queryForRowSet(querySearchReservationId, resIdSearch);
+
 		if (results.next()) {
 			res = mapRowToReservation(results);
 		}

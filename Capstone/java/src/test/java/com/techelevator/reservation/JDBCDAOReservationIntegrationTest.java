@@ -59,6 +59,12 @@ public class JDBCDAOReservationIntegrationTest {
 	public void rollback() throws SQLException {
 		dataSource.getConnection().rollback();
 	}
+
+	@AfterClass
+	public static void destoryDataSource() {
+		dataSource.destroy();
+	}
+
 	
 	@Test
 	public void get_all_reservations_test() {
@@ -96,8 +102,10 @@ public class JDBCDAOReservationIntegrationTest {
 		newRes.setSiteId(601L);
 		dao.createReservation(newRes);
 		List<Reservation> allNewRes = dao.getAllReservations();
+		Reservation shouldBeTestRest = dao.searchForReservationByReservationId(newRes.getReservationId());
 		int expectedSize = 49; //this test will fail dependent on size of testers local database
 		assertEquals(expectedSize, allNewRes.size());
+		assertEquals(shouldBeTestRest, newRes);
 		
 		
 	}

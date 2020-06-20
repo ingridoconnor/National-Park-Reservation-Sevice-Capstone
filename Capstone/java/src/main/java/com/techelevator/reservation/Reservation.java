@@ -1,6 +1,7 @@
 package com.techelevator.reservation;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Reservation {
 
@@ -58,4 +59,18 @@ public class Reservation {
     public void setCreateDate(LocalDate createDate) {
         this.createDate = createDate;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Reservation)) return false;
+        Reservation that = (Reservation) o;
+        return Objects.equals(getReservationId(), that.getReservationId()) &&
+                Objects.equals(getSiteId(), that.getSiteId()) &&
+                Objects.equals(getName(), that.getName()) &&
+                Objects.equals(getFromDate(), that.getFromDate()) &&
+                Objects.equals(getToDate(), that.getToDate()) &&
+                Objects.equals(getCreateDate(), that.getCreateDate());
+    }
+
 }
