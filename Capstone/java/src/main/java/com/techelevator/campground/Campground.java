@@ -1,6 +1,7 @@
 package com.techelevator.campground;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.Objects;
 
@@ -12,9 +13,17 @@ public class Campground {
     private String openFromMonth;
     private String openToMonth;
     private BigDecimal dailyFee;
-    public boolean isOpen;
+    
+    
+    public boolean isOpen(LocalDate d1, LocalDate d2) {
+    	LocalDate openMonth = LocalDate.parse(openFromMonth);
+    	LocalDate closeMonth = LocalDate.parse(openToMonth);
+    	return(openMonth.isBefore(d1) && closeMonth.isAfter(d2)); 
+    		
+    	
+    }
 
-    public Long getCampgroundId() {
+	public Long getCampgroundId() {
         return campgroundId;
     }
 
