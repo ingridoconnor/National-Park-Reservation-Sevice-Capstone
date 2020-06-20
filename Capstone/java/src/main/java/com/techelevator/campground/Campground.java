@@ -12,6 +12,7 @@ public class Campground {
     private String openFromMonth;
     private String openToMonth;
     private BigDecimal dailyFee;
+    public boolean isOpen;
 
 
     public Long getCampgroundId() {

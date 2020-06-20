@@ -28,7 +28,7 @@ public class JDBCDAOCampgroundIntegrationTest {
 		dataSource = new SingleConnectionDataSource();
 		dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
 		dataSource.setUsername("postgres");
-		dataSource.setPassword("G0dmanthing");
+		dataSource.setPassword("postgres1");
 
 		dataSource.setAutoCommit(false);
 	}
