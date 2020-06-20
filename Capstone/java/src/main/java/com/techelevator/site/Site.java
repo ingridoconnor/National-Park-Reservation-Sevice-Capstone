@@ -13,20 +13,8 @@ public class Site {
     private boolean utilities;
     private BigDecimal dailyFee;
 
-    public Long getSiteID() {
-        return siteId;
-    }
-
     public void setSiteID(Long siteID) {
         this.siteId = siteID;
-    }
-
-    public Long getCampgroundId() {
-        return campgroundId;
-    }
-
-    public void setCampgroundId(Long campgroundId) {
-        this.campgroundId = campgroundId;
     }
 
     public int getSiteNumber() {
