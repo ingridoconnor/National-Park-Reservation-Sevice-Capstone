@@ -1,6 +1,8 @@
 package com.techelevator;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -133,6 +135,9 @@ public class CampgroundCLI {
         String departureDate = menu.getUserInput();
         LocalDate departureDateAsLocalDate = LocalDate.parse(departureDate);
 
+        Period intervalPeriod = Period.between(arrivalDateAsLocalDate, departureDateAsLocalDate);
+        BigDecimal daysInIntervalPeriod = BigDecimal.valueOf(intervalPeriod.getDays());
+
         List<Site> sitesAvailableDuringSelectedDates = siteDAO.getSitesByDate(answerAsId, arrivalDateAsLocalDate, departureDateAsLocalDate);
 
         if (sitesAvailableDuringSelectedDates.isEmpty()) {
@@ -140,10 +145,12 @@ public class CampgroundCLI {
         } else {
             printHeading("Results Matching Your Search Criteria");
             System.out.println(String.format("%-10s%-15s%-15s%15s%15s%10s", "Site No.", "Max Occup.", "Accessible?", "Max RV Length", "Utility", "Cost"));
+            
             for (Site site : sitesAvailableDuringSelectedDates) {
                 System.out.println(String.format("%-10s%-15s%-15s%15s%15s%10s", site.getSiteNumber(), site.getMaxOccupancy(),
-                        site.getAccessible(), site.getMaxRvLength(), site.getUtilities(), site.getDailyFee()));
+                        site.getAccessible(), site.getMaxRvLength(), site.getUtilities(), site.getDailyFee().multiply(daysInIntervalPeriod)));
             }
+
             System.out.println("\nWhich site should be reserved?");
         	String ans = menu.getUserInput();
         	Long ansAsId = Long.parseLong(ans);
@@ -178,6 +185,8 @@ public class CampgroundCLI {
     private long verifyCampgroundSelection(String userCampgroundIdInput) {
 
         long campgroundId = 0;
+        List<Campground> campgroundsInPark = campgroundDAO.getCampgroundByParkId(park.getParkId());
+        boolean campgroundIdCheck = false;
 
         try {
             campgroundId = Long.parseLong(userCampgroundIdInput);
@@ -186,9 +195,16 @@ public class CampgroundCLI {
             handleSearchReservations();
         }
 
+        for (Campground c : campgroundsInPark) {
+            if (c.getCampgroundId().equals(campgroundId)) {
+                campgroundIdCheck = true;
+                break;
+            }
+        }
+
         if (campgroundId == 0) {
             handleCampgroundMenu();
-        } else if (campgroundId < 0 || campgroundId > 7) {
+        } else if (campgroundId < 0 || !campgroundIdCheck) {
             System.out.println("Invalid entry. Please select another value (or enter '0' to return to previous screen)");
             handleSearchReservations();
         }
