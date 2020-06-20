@@ -29,9 +29,9 @@ public class JDBCDAOReservationIntegrationTest {
 	@BeforeClass
 	public static void setupDataSource() {
 		dataSource = new SingleConnectionDataSource();
-		dataSource.setUrl("jdbc:postgresql://localhost:5432/projects");
+		dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
 		dataSource.setUsername("postgres");
-		dataSource.setPassword("postgres1");
+		dataSource.setPassword("G0dmanthing");
 
 		dataSource.setAutoCommit(false);
 	}
@@ -49,11 +49,9 @@ public class JDBCDAOReservationIntegrationTest {
 
 		dao = new JDBCReservationDAO(dataSource);
 		
-		String testReservation = "INSERT INTO reservation (name, site_id, from_date, to_date, create_date) "
-				+ "VALUES (?, ?, ?, ?, ?) RETURNING reservation_id";
-		
-		Long newResId = jdbcTemplate.queryForObject(testReservation, Long.class, "jesse", 600, 2020-01-01, 2020-01-02, 2020-01-01);
-		
+		String testReservation = "INSERT INTO reservation (reservation_id, name, site_id, from_date, to_date, create_date) "
+				+ "VALUES (100, 'Jesse', 600, '2020-01-01', '2020-01-02', '2020-01-02')";
+		jdbcTemplate.update(testReservation);
 		
 	}
 
@@ -65,7 +63,7 @@ public class JDBCDAOReservationIntegrationTest {
 	@Test
 	public void get_all_reservations_test() {
 		List<Reservation> expectedReservation = dao.getAllReservations();
-		int expectedSize = 47; //this test will fail dependent on size of testers local database
+		int expectedSize = 48; //this test will fail dependent on size of testers local database
 		assertEquals(expectedSize, expectedReservation.size());
 	
 		
@@ -73,7 +71,7 @@ public class JDBCDAOReservationIntegrationTest {
 	@Test
 	public void search_for_reservation_by_reservation_id_test() {
 		
-		Reservation testReservation = dao.searchForReservationByReservationId(50L);
+		Reservation testReservation = dao.searchForReservationByReservationId((long) 100);
 		List <Reservation> expectedRes = dao.getAllReservations();
 		Reservation isDefTestRes = expectedRes.get(expectedRes.size() - 1);
 		assertEquals(isDefTestRes, testReservation);
@@ -91,17 +89,15 @@ public class JDBCDAOReservationIntegrationTest {
 		String cDate = "2020-02-25";
 		LocalDate createDate = LocalDate.parse(cDate);
 		newRes.setName("walter");
-		newRes.setReservationId(700L);
+		newRes.setReservationId(99L);
 		newRes.setFromDate(fromDate);
 		newRes.setToDate(toDate);
 		newRes.setCreateDate(createDate);
-		newRes.setSiteId(900L);
+		newRes.setSiteId(601L);
 		dao.createReservation(newRes);
-		Reservation shouldBeNewRes = dao.searchForReservationByReservationId(newRes.getReservationId());
 		List<Reservation> allNewRes = dao.getAllReservations();
-		int expectedSize = 48;
+		int expectedSize = 49; //this test will fail dependent on size of testers local database
 		assertEquals(expectedSize, allNewRes.size());
-		assertEquals(newRes, shouldBeNewRes);
 		
 		
 	}

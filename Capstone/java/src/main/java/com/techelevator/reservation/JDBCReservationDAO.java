@@ -42,7 +42,6 @@ public class JDBCReservationDAO implements ReservationDAO {
 		SqlRowSet results = jdbcTemplate.queryForRowSet(querySearchReservationId, resIdSearch);
 		if (results.next()) {
 			res = mapRowToReservation(results);
-			
 		}
 		
 		return res;
