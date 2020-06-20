@@ -59,12 +59,6 @@ public class JDBCDAOReservationIntegrationTest {
 	public void rollback() throws SQLException {
 		dataSource.getConnection().rollback();
 	}
-
-	@AfterClass
-	public static void destoryDataSource() {
-		dataSource.destroy();
-	}
-
 	
 	@Test
 	public void get_all_reservations_test() {
