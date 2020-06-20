@@ -61,7 +61,7 @@ public class CampgroundCLI {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("G0dmanthing");
+        dataSource.setPassword("postgres1");
 
         parkDAO = new JDBCParkDAO(dataSource);
         campgroundDAO = new JDBCCampgroundDAO(dataSource);
@@ -132,8 +132,11 @@ public class CampgroundCLI {
 
 		System.out.println("What is the arrival date? (YYYY-MM-DD)");
 		String arrivalDate = menu.getUserInput();
+		int whatever = handleNotInRange(arrivalDate);
 		System.out.println("What is the departure date? (YYYY-MM-DD)");
         String departureDate = menu.getUserInput();
+        int whatever2 = handleNotInRange(departureDate);
+        
 
         if (isValidDate(arrivalDate) && isValidDate(departureDate)) {
             // empty if statement who dis
@@ -149,8 +152,12 @@ public class CampgroundCLI {
         BigDecimal daysInIntervalPeriod = BigDecimal.valueOf(intervalPeriod.getDays());
 
         List<Site> sitesAvailableDuringSelectedDates = siteDAO.getSitesByDate(answerAsId, arrivalDateAsLocalDate, departureDateAsLocalDate);
-
-        if (sitesAvailableDuringSelectedDates.isEmpty()) {
+        Campground campground = campgroundDAO.getCampgroundByCampgroundId(answerAsId);
+        boolean campgroundIsOpen = campground.isOpen(whatever, whatever2);
+        if(campgroundIsOpen) {
+        	System.out.println("THIS WORKS!");
+        }
+        if (sitesAvailableDuringSelectedDates.isEmpty() || !campgroundIsOpen) {
             System.out.println("No campsites available during selected dates. Please enter different dates, or select a different campsite.");
         } else {
             printHeading("Results Matching Your Search Criteria");
@@ -170,7 +177,14 @@ public class CampgroundCLI {
 	}
 
 
-
+    private int handleNotInRange(String arrivalDate) {
+    	if(arrivalDate.length() < 7) {
+    		return 0;
+    		
+    	}
+    	return Integer.parseInt(arrivalDate.substring(5, 7));
+    }
+    
 
     private void handleAddReservation(Long siteId, LocalDate fromDate, LocalDate toDate) {
 

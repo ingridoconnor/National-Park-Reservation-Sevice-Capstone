@@ -15,10 +15,8 @@ public class Campground {
     private BigDecimal dailyFee;
     
     
-    public boolean isOpen(LocalDate d1, LocalDate d2) {
-    	LocalDate openMonth = LocalDate.parse(openFromMonth);
-    	LocalDate closeMonth = LocalDate.parse(openToMonth);
-    	return(openMonth.isBefore(d1) && closeMonth.isAfter(d2)); 
+    public boolean isOpen(int d1, int d2) {
+    	return (Integer.parseInt(openFromMonth) <= d1 && Integer.parseInt(openToMonth) >= d2);
     		
     	
     }
