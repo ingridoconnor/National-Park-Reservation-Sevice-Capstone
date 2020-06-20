@@ -1,8 +1,9 @@
 package com.techelevator.campground;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -25,34 +26,37 @@ public class JDBCDAOCampgroundIntegrationTest {
 	@BeforeClass
 	public static void setupDataSource() {
 		dataSource = new SingleConnectionDataSource();
-		dataSource.setUrl("jdbc:postgresql://localhost:5432/projects");
+		dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
 		dataSource.setUsername("postgres");
 		dataSource.setPassword("postgres1");
 
 		dataSource.setAutoCommit(false);
 	}
 	@AfterClass
-	public static void closeDataSource() throws SQLException {
+	public static void destoryDataSource() {
 		dataSource.destroy();
 	}
+	
 	@Before
 	public void setup() {
 
         jdbcTemplate = new JdbcTemplate(dataSource);
 
 		dao = new JDBCCampgroundDAO(dataSource);
+		
+	
 	}
 	@After
 	public void rollback() throws SQLException {
 		dataSource.getConnection().rollback();
 	}
-	@Test
-	public void get_all_campgrounds_test() {
-		
-	}
+	
 	@Test
 	public void get_campground_by_campground_id_test() {
-		
+		Campground testCampground = dao.getCampgroundByCampgroundId((long) 7);
+		List<Campground> expectedCampground = dao.getAllCampgrounds();
+		Campground isTestCampground = expectedCampground.get(expectedCampground.size() - 1);
+		assertEquals(isTestCampground, testCampground);
 	}
 	
 

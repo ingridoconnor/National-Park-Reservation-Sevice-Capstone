@@ -31,7 +31,7 @@ public class JDBCDAOReservationIntegrationTest {
 		dataSource = new SingleConnectionDataSource();
 		dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
 		dataSource.setUsername("postgres");
-		dataSource.setPassword("G0dmanthing");
+		dataSource.setPassword("postgres1");
 
 		dataSource.setAutoCommit(false);
 	}
@@ -69,7 +69,7 @@ public class JDBCDAOReservationIntegrationTest {
 	@Test
 	public void get_all_reservations_test() {
 		List<Reservation> expectedReservation = dao.getAllReservations();
-		int expectedSize = 48; //this test will fail dependent on size of testers local database
+		int expectedSize = 47; //this test will fail dependent on size of testers local database
 		assertEquals(expectedSize, expectedReservation.size());
 	
 		
@@ -103,7 +103,7 @@ public class JDBCDAOReservationIntegrationTest {
 		dao.createReservation(newRes);
 		List<Reservation> allNewRes = dao.getAllReservations();
 		Reservation shouldBeTestRest = dao.searchForReservationByReservationId(newRes.getReservationId());
-		int expectedSize = 49; //this test will fail dependent on size of testers local database
+		int expectedSize = 48; //this test will fail dependent on size of testers local database
 		assertEquals(expectedSize, allNewRes.size());
 		assertEquals(shouldBeTestRest, newRes);
 		
