@@ -13,7 +13,6 @@ public class Campground {
     private String openToMonth;
     private BigDecimal dailyFee;
 
-
     public Long getCampgroundId() {
         return campgroundId;
     }
