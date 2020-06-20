@@ -73,6 +73,13 @@ public class JDBCDAOSiteIntegrationTest {
 		assertFalse(blackwoods.isAccessible());
 		assertEquals(0, blackwoods.getMaxRvLength());
 		assertFalse(blackwoods.isUtilities());
+
+
+		for (int i = 0; i < sites.size(); i++) {
+			int helper = i + 1;
+			assertEquals(helper, sites.get(i).getSiteNumber());
+		}
+
 	}
 	
 
