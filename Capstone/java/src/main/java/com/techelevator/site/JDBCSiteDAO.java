@@ -18,20 +18,6 @@ public class JDBCSiteDAO implements SiteDAO {
 	}
 
 	@Override
-	public List<Site> getAllSites() {
-		List<Site> siteList = new ArrayList<>();
-		String queryGetAllSites = "SELECT * FROM site";
-
-		SqlRowSet results = jdbcTemplate.queryForRowSet(queryGetAllSites);
-		while (results.next()) {
-			Site site = mapRowToSite(results);
-			siteList.add(site);
-		}
-
-		return siteList;
-
-	}
-	@Override
 	public List<Site> getSitesByDate(Long campgroundId, LocalDate fromDate, LocalDate toDate) {
 		List<Site> siteList = new ArrayList<>();
 		String querySearchSitesById = "SELECT site_number, site_id, max_occupancy, accessible, max_rv_length, utilities, daily_fee FROM site s " +
