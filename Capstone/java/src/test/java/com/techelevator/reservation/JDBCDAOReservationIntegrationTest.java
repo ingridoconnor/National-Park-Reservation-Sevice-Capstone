@@ -3,6 +3,7 @@ package com.techelevator.reservation;
 import static org.junit.Assert.assertEquals;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +48,13 @@ public class JDBCDAOReservationIntegrationTest {
         jdbcTemplate = new JdbcTemplate(dataSource);
 
 		dao = new JDBCReservationDAO(dataSource);
+		
+		String testReservation = "INSERT INTO reservation (name, site_id, from_date, to_date, create_date) "
+				+ "VALUES (?, ?, ?, ?, ?) RETURNING reservation_id";
+		
+		Long newResId = jdbcTemplate.queryForObject(testReservation, Long.class, "jesse", 600, 2020-01-01, 2020-01-02, 2020-01-01);
+		
+		
 	}
 
 	@After
@@ -57,17 +65,44 @@ public class JDBCDAOReservationIntegrationTest {
 	@Test
 	public void get_all_reservations_test() {
 		List<Reservation> expectedReservation = dao.getAllReservations();
-		assertEquals(expectedReservation, 0);
+		int expectedSize = 47; //this test will fail dependent on size of testers local database
+		assertEquals(expectedSize, expectedReservation.size());
 	
 		
 	}
 	@Test
 	public void search_for_reservation_by_reservation_id_test() {
 		
+		Reservation testReservation = dao.searchForReservationByReservationId(50L);
+		List <Reservation> expectedRes = dao.getAllReservations();
+		Reservation isDefTestRes = expectedRes.get(expectedRes.size() - 1);
+		assertEquals(isDefTestRes, testReservation);
+		
+		
 	}
 	
 	@Test
 	public void create_reservation_test() throws SQLException {
+		Reservation newRes = new Reservation();
+		String fDate = "2020-02-26";
+		LocalDate fromDate = LocalDate.parse(fDate);
+		String tDate = "2020-02-27";
+		LocalDate toDate = LocalDate.parse(tDate);
+		String cDate = "2020-02-25";
+		LocalDate createDate = LocalDate.parse(cDate);
+		newRes.setName("walter");
+		newRes.setReservationId(700L);
+		newRes.setFromDate(fromDate);
+		newRes.setToDate(toDate);
+		newRes.setCreateDate(createDate);
+		newRes.setSiteId(900L);
+		dao.createReservation(newRes);
+		Reservation shouldBeNewRes = dao.searchForReservationByReservationId(newRes.getReservationId());
+		List<Reservation> allNewRes = dao.getAllReservations();
+		int expectedSize = 48;
+		assertEquals(expectedSize, allNewRes.size());
+		assertEquals(newRes, shouldBeNewRes);
+		
 		
 	}
 }
