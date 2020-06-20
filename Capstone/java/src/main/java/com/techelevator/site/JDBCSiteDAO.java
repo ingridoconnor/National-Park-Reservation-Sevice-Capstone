@@ -54,13 +54,13 @@ public class JDBCSiteDAO implements SiteDAO {
 	private Site mapRowToSite(SqlRowSet results) {
 
 		Site site = new Site();
+		site.setSiteID(results.getLong("site_id"));
 		site.setSiteNumber(results.getInt("site_number"));
 		site.setAccessible(results.getBoolean("accessible"));
 		site.setMaxOccupancy(results.getInt("max_occupancy"));
 		site.setMaxRvLength(results.getInt("max_rv_length"));
 		site.setUtilities(results.getBoolean("utilities"));
 		site.setDailyFee(results.getBigDecimal("daily_fee"));
-		site.setSiteID(results.getLong("site_id"));
 		return site;
 		
 	}

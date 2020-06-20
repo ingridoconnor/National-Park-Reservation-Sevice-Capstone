@@ -33,11 +33,13 @@ public class JDBCCampgroundDAO implements CampgroundDAO {
 
 	@Override
 	public Campground getCampgroundByCampgroundId(Long campgroundId) {
+
+		Campground campground = null;
 		String querySearchCampgroundId = "SELECT * FROM campground WHERE campground_id = ?";
-		
 		SqlRowSet results = jdbcTemplate.queryForRowSet(querySearchCampgroundId, campgroundId);
-		results.next();
-		Campground campground = mapRowToCampground(results);
+		if (results.next()) {
+			campground = mapRowToCampground(results);
+		}
 
 		return campground;
 		

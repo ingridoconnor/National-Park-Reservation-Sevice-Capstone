@@ -53,6 +53,14 @@ public class Site {
         this.accessible = accessible;
     }
 
+    public String getAccessible() {
+        return (accessible ? "Yes" : "No");
+    }
+
+    public String getUtilities() {
+        return (utilities ? "Yes" : "N/A");
+    }
+
     public int getMaxRvLength() {
         return maxRvLength;
     }
@@ -78,7 +86,7 @@ public class Site {
 
 	@Override
 	public String toString() {
-		return siteId + " " + maxOccupancy + " " + (accessible ? "True" : "False") + " " + maxRvLength + " " + (utilities ? "True" : "False") + " " + getDailyFee();
+		return siteNumber + " " + maxOccupancy + " " + (accessible ? "Yes" : "No") + " " + maxRvLength + " " + (utilities ? "Yes" : "N/A") + " " + getDailyFee();
 	}
      
 }
