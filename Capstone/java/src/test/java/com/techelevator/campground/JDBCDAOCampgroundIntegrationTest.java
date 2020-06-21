@@ -13,10 +13,6 @@ import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
-
-
-
-
 public class JDBCDAOCampgroundIntegrationTest {
 
 	private static SingleConnectionDataSource dataSource;
@@ -58,8 +54,5 @@ public class JDBCDAOCampgroundIntegrationTest {
 		Campground isTestCampground = expectedCampground.get(expectedCampground.size() - 1);
 		assertEquals(isTestCampground, testCampground);
 	}
-	
-
-	
 	
 }

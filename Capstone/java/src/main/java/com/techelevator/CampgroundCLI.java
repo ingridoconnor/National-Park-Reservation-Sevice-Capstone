@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -34,7 +35,6 @@ public class CampgroundCLI {
 			                                                       CAMPGROUND_MENU_OPTION_SEARCH_FOR_RESERVATION,
                                                                    CAMPGROUND_MENU_OPTION_RETURN};
 
-
     private static final String CAMPGROUND_SUBMENU_OPTION_SEARCH_FOR_RESERVATION = "Search for Available Reservation";
     private static final String CAMPGROUND_SUBMENU_OPTION_RETURN = "Return to Previous Screen";
     private static final String[] CAMPGROUND_SUBMENU_OPTIONS = new String[] {CAMPGROUND_SUBMENU_OPTION_SEARCH_FOR_RESERVATION,
@@ -61,7 +61,7 @@ public class CampgroundCLI {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres1");
+        dataSource.setPassword("G0dmanthing");
 
         parkDAO = new JDBCParkDAO(dataSource);
         campgroundDAO = new JDBCCampgroundDAO(dataSource);
@@ -132,31 +132,33 @@ public class CampgroundCLI {
 
 		System.out.println("What is the arrival date? (YYYY-MM-DD)");
 		String arrivalDate = menu.getUserInput();
-		int whatever = handleNotInRange(arrivalDate);
+		int monthOfArrivalDate = handleNotInRange(arrivalDate);
 		System.out.println("What is the departure date? (YYYY-MM-DD)");
         String departureDate = menu.getUserInput();
-        int whatever2 = handleNotInRange(departureDate);
-        
+        int monthOfDepartureDate = handleNotInRange(departureDate);
 
         if (isValidDate(arrivalDate) && isValidDate(departureDate)) {
             // empty if statement who dis
+            // in all seriousness when we tried inverting this logic
+            // if (!isValidDate(arrivalDate) || !isValidDate(departureDate))
+            // we would get parsing errors on the local dates created below
         } else {
             System.out.println("Not a valid date. Please try again");
+            System.out.flush();
             handleSearchReservations();
         }
 
         LocalDate arrivalDateAsLocalDate = LocalDate.parse(arrivalDate);
         LocalDate departureDateAsLocalDate = LocalDate.parse(departureDate);
+        long durationOfStay = ChronoUnit.DAYS.between(arrivalDateAsLocalDate, departureDateAsLocalDate);
 
         Period intervalPeriod = Period.between(arrivalDateAsLocalDate, departureDateAsLocalDate);
         BigDecimal daysInIntervalPeriod = BigDecimal.valueOf(intervalPeriod.getDays());
 
         List<Site> sitesAvailableDuringSelectedDates = siteDAO.getSitesByDate(answerAsId, arrivalDateAsLocalDate, departureDateAsLocalDate);
         Campground campground = campgroundDAO.getCampgroundByCampgroundId(answerAsId);
-        boolean campgroundIsOpen = campground.isOpen(whatever, whatever2);
-        if(campgroundIsOpen) {
-        	System.out.println("THIS WORKS!");
-        }
+        boolean campgroundIsOpen = campground.isOpen(monthOfArrivalDate, monthOfDepartureDate);
+
         if (sitesAvailableDuringSelectedDates.isEmpty() || !campgroundIsOpen) {
             System.out.println("No campsites available during selected dates. Please enter different dates, or select a different campsite.");
         } else {
@@ -165,26 +167,85 @@ public class CampgroundCLI {
             
             for (Site site : sitesAvailableDuringSelectedDates) {
                 System.out.println(String.format("%-10s%-15s%-15s%15s%15s%10s", site.getSiteNumber(), site.getMaxOccupancy(),
-                        site.getAccessible(), site.getMaxRvLength(), site.getUtilities(), site.getDailyFee().multiply(daysInIntervalPeriod)));
+                        site.getAccessible(), site.getMaxRvLength(), site.getUtilities(), site.getDailyFee().multiply(BigDecimal.valueOf(durationOfStay))));
             }
 
             System.out.println("\nWhich site should be reserved?");
+            //
         	String ans = menu.getUserInput();
-        	Long ansAsId = Long.parseLong(ans);
-        	handleAddReservation(ansAsId, arrivalDateAsLocalDate, departureDateAsLocalDate);
+        	long siteId = verifySiteSelection(ans, sitesAvailableDuringSelectedDates);
+        	handleAddReservation(siteId, arrivalDateAsLocalDate, departureDateAsLocalDate);
         }
 
 	}
 
+	private long verifySiteSelection(String siteNumberInput, List<Site> availableSites) {
+
+        int siteNumber = -1;
+        boolean siteNumCheckIsLegit = false;
+
+        try {
+            siteNumber = Integer.parseInt(siteNumberInput);
+        } catch (NumberFormatException ex) {
+            System.out.println("Invalid entry. Please select another value (or enter '0' to return to previous screen");
+
+        }
+
+        for (Site s : availableSites) {
+            if (siteNumber == s.getSiteNumber()) {
+                siteNumCheckIsLegit = true;
+                break;
+            }
+        }
+
+        if (siteNumber == 0) {
+            handleSearchReservations();
+        } else if (siteNumber < 0 || !siteNumCheckIsLegit) {
+            System.out.println("Invalid entry.");
+            handleSearchReservations();
+        }
+
+        siteNumber--;
+
+        return availableSites.get(siteNumber).getSiteId();
+    }
+
+    private long verifyCampgroundSelection(String userCampgroundIdInput) {
+
+        long campgroundId = 0;
+        List<Campground> campgroundsInPark = campgroundDAO.getCampgroundByParkId(park.getParkId());
+        boolean campgroundIdCheck = false;
+
+        try {
+            campgroundId = Long.parseLong(userCampgroundIdInput);
+        } catch (NumberFormatException ex) {
+            System.out.println("Invalid entry.");
+            handleSearchReservations();
+        }
+
+        for (Campground c : campgroundsInPark) {
+            if (c.getCampgroundId().equals(campgroundId)) {
+                campgroundIdCheck = true;
+                break;
+            }
+        }
+
+        if (campgroundId == 0) {
+            handleCampgroundMenu();
+        } else if (campgroundId < 0 || !campgroundIdCheck) {
+            System.out.println("Invalid entry.");
+            handleSearchReservations();
+        }
+
+        return campgroundId;
+    }
 
     private int handleNotInRange(String arrivalDate) {
     	if(arrivalDate.length() < 7) {
     		return 0;
-    		
     	}
     	return Integer.parseInt(arrivalDate.substring(5, 7));
     }
-    
 
     private void handleAddReservation(Long siteId, LocalDate fromDate, LocalDate toDate) {
 
@@ -210,35 +271,6 @@ public class CampgroundCLI {
         }
     }
 
-    private long verifyCampgroundSelection(String userCampgroundIdInput) {
-
-        long campgroundId = 0;
-        List<Campground> campgroundsInPark = campgroundDAO.getCampgroundByParkId(park.getParkId());
-        boolean campgroundIdCheck = false;
-
-        try {
-            campgroundId = Long.parseLong(userCampgroundIdInput);
-        } catch (NumberFormatException ex) {
-            System.out.println("Invalid entry. Please select another value (or enter '0' to return to previous screen)");
-            handleSearchReservations();
-        }
-
-        for (Campground c : campgroundsInPark) {
-            if (c.getCampgroundId().equals(campgroundId)) {
-                campgroundIdCheck = true;
-                break;
-            }
-        }
-
-        if (campgroundId == 0) {
-            handleCampgroundMenu();
-        } else if (campgroundId < 0 || !campgroundIdCheck) {
-            System.out.println("Invalid entry. Please select another value (or enter '0' to return to previous screen)");
-            handleSearchReservations();
-        }
-
-        return campgroundId;
-    }
 
     private boolean isValidDate(String input) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

@@ -13,8 +13,6 @@ import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
-
-
 public class JDBCDAOParkIntegrationTest {
 
 	private static SingleConnectionDataSource dataSource;
