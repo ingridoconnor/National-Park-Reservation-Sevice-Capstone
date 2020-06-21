@@ -73,4 +73,10 @@ public class Reservation {
                 Objects.equals(getCreateDate(), that.getCreateDate());
     }
 
+	@Override
+	public String toString() {
+		return reservationId + " " + siteId + " " + name + " " + fromDate + " " + toDate; 
+	}
+    
+
 }

@@ -30,9 +30,10 @@ public class CampgroundCLI {
 
     private static final String CAMPGROUND_MENU_OPTION_VIEW_CAMPGROUNDS = "View Campgrounds";
     private static final String CAMPGROUND_MENU_OPTION_SEARCH_FOR_RESERVATION = "Search for Reservation";
+    public static final String CAMPGROUND_MENU_OPTION_SEE_UPCOMING_RESERVATIONS = "See Upcoming Reservations";
     private static final String CAMPGROUND_MENU_OPTION_RETURN = "Return to Previous Screen";
     private static final String[] CAMPGROUND_MENU_OPTIONS = new String[]{CAMPGROUND_MENU_OPTION_VIEW_CAMPGROUNDS,
-			                                                       CAMPGROUND_MENU_OPTION_SEARCH_FOR_RESERVATION,
+			                                                       CAMPGROUND_MENU_OPTION_SEARCH_FOR_RESERVATION,CAMPGROUND_MENU_OPTION_SEE_UPCOMING_RESERVATIONS,
                                                                    CAMPGROUND_MENU_OPTION_RETURN};
 
     private static final String CAMPGROUND_SUBMENU_OPTION_SEARCH_FOR_RESERVATION = "Search for Available Reservation";
@@ -61,7 +62,7 @@ public class CampgroundCLI {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("G0dmanthing");
+        dataSource.setPassword("postgres1");
 
         parkDAO = new JDBCParkDAO(dataSource);
         campgroundDAO = new JDBCCampgroundDAO(dataSource);
@@ -109,7 +110,16 @@ public class CampgroundCLI {
             } else if (parkMenuChoice.equals(CAMPGROUND_MENU_OPTION_SEARCH_FOR_RESERVATION)) {
                 listCampgroundsInPark(park.getParkId());
                 handleSearchReservations();
-            } else if (parkMenuChoice.equals(CAMPGROUND_MENU_OPTION_RETURN)) {
+               
+            }else if (parkMenuChoice.equals(CAMPGROUND_MENU_OPTION_SEE_UPCOMING_RESERVATIONS)) {
+            	List<Reservation> upcomingRes = reservationDAO.searchUpcomingRes(park.getParkId());
+            		printHeading((String.format("%1s%9s%30s%40s%25s",  "ResID", "SiteID", "Name", "FromDate", "ToDate")));
+            		for(Reservation r: upcomingRes) {
+            			System.out.println((String.format("%1s%9s%50s%25s%25s", r.getReservationId(), r.getSiteId(), r.getName(), r.getFromDate(), r.getToDate())));
+            		}
+            	
+            }
+            else if (parkMenuChoice.equals(CAMPGROUND_MENU_OPTION_RETURN)) {
                 break;
             }
         }

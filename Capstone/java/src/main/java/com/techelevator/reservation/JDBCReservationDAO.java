@@ -46,15 +46,15 @@ public class JDBCReservationDAO implements ReservationDAO {
 		return res;
 	}
 	@Override
-	public List<Reservation> searchUpcomingRes() {
+	public List<Reservation> searchUpcomingRes(Long parkId) {
 		List<Reservation> upcomingResList = new ArrayList<>();
-		String querySearchForUpcomingRes = "SELECT reservation.reservation_id, reservation.name, site.site_id FROM reservation" + 
-				"INNER JOIN site ON reservation.site_id = site.site_id" + 
-				"INNER JOIN campground ON campground.campground_id = site.campground_id" + 
-				"INNER JOIN park ON park.park_id = campground.park_id" + 
-				"WHERE campground.park_id = ? AND reservation.from_date >= CURRENT_DATE AND to_date <= CURRENT_DATE + 30";
+		String querySearchForUpcomingRes = "SELECT * FROM reservation " + 
+				"INNER JOIN site ON reservation.site_id = site.site_id " + 
+				"INNER JOIN campground ON campground.campground_id = site.campground_id " + 
+				"INNER JOIN park ON park.park_id = campground.park_id " + 
+				"WHERE campground.park_id = ? AND reservation.from_date >= CURRENT_DATE AND reservation.to_date <= CURRENT_DATE + 30 ";
 		
-		SqlRowSet results = jdbcTemplate.queryForRowSet(querySearchForUpcomingRes);
+		SqlRowSet results = jdbcTemplate.queryForRowSet(querySearchForUpcomingRes, parkId);
 		while (results.next()) {
 			Reservation reservation = mapRowToReservation(results);
 			upcomingResList.add(reservation);
