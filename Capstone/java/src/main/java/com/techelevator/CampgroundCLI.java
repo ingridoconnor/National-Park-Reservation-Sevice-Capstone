@@ -30,7 +30,7 @@ public class CampgroundCLI {
 
     private static final String CAMPGROUND_MENU_OPTION_VIEW_CAMPGROUNDS = "View Campgrounds";
     private static final String CAMPGROUND_MENU_OPTION_SEARCH_FOR_RESERVATION = "Search for Reservation";
-    public static final String CAMPGROUND_MENU_OPTION_SEE_UPCOMING_RESERVATIONS = "See Upcoming Reservations";
+    public static final String CAMPGROUND_MENU_OPTION_SEE_UPCOMING_RESERVATIONS = "See Reservations For Park In Next 30 Days";
     private static final String CAMPGROUND_MENU_OPTION_RETURN = "Return to Previous Screen";
     private static final String[] CAMPGROUND_MENU_OPTIONS = new String[]{CAMPGROUND_MENU_OPTION_VIEW_CAMPGROUNDS,
 			                                                       CAMPGROUND_MENU_OPTION_SEARCH_FOR_RESERVATION,CAMPGROUND_MENU_OPTION_SEE_UPCOMING_RESERVATIONS,
@@ -62,7 +62,7 @@ public class CampgroundCLI {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres1");
+        dataSource.setPassword("G0dmanthing");
 
         parkDAO = new JDBCParkDAO(dataSource);
         campgroundDAO = new JDBCCampgroundDAO(dataSource);
@@ -113,9 +113,9 @@ public class CampgroundCLI {
                
             }else if (parkMenuChoice.equals(CAMPGROUND_MENU_OPTION_SEE_UPCOMING_RESERVATIONS)) {
             	List<Reservation> upcomingRes = reservationDAO.searchUpcomingRes(park.getParkId());
-            		printHeading((String.format("%1s%9s%30s%40s%25s",  "ResID", "SiteID", "Name", "FromDate", "ToDate")));
+            		printHeading((String.format("%7s%10s%40s%32s%24s",  "ResID", "SiteID", "Name", "Arrival", "Departure")));
             		for(Reservation r: upcomingRes) {
-            			System.out.println((String.format("%1s%9s%50s%25s%25s", r.getReservationId(), r.getSiteId(), r.getName(), r.getFromDate(), r.getToDate())));
+            			System.out.println((String.format("%5s%10s%50s%25s%24s", r.getReservationId(), r.getSiteId(), r.getName(), r.getFromDate(), r.getToDate())));
             		}
             	
             }
@@ -148,22 +148,17 @@ public class CampgroundCLI {
         int monthOfDepartureDate = handleNotInRange(departureDate);
 
         if (isValidDate(arrivalDate) && isValidDate(departureDate)) {
-            // empty if statement who dis
-            // in all seriousness when we tried inverting this logic
-            // if (!isValidDate(arrivalDate) || !isValidDate(departureDate))
-            // we would get parsing errors on the local dates created below
+            // we know having an empty statement is bad practice but this works
+            // the way we want and we wanted to try some of the bonus stuff
+            // sorry
         } else {
             System.out.println("Not a valid date. Please try again");
-            System.out.flush();
-            handleSearchReservations();
+            return;
         }
 
         LocalDate arrivalDateAsLocalDate = LocalDate.parse(arrivalDate);
         LocalDate departureDateAsLocalDate = LocalDate.parse(departureDate);
         long durationOfStay = ChronoUnit.DAYS.between(arrivalDateAsLocalDate, departureDateAsLocalDate);
-
-        Period intervalPeriod = Period.between(arrivalDateAsLocalDate, departureDateAsLocalDate);
-        BigDecimal daysInIntervalPeriod = BigDecimal.valueOf(intervalPeriod.getDays());
 
         List<Site> sitesAvailableDuringSelectedDates = siteDAO.getSitesByDate(answerAsId, arrivalDateAsLocalDate, departureDateAsLocalDate);
         Campground campground = campgroundDAO.getCampgroundByCampgroundId(answerAsId);
@@ -181,7 +176,6 @@ public class CampgroundCLI {
             }
 
             System.out.println("\nWhich site should be reserved?");
-            //
         	String ans = menu.getUserInput();
         	long siteId = verifySiteSelection(ans, sitesAvailableDuringSelectedDates);
         	handleAddReservation(siteId, arrivalDateAsLocalDate, departureDateAsLocalDate);
